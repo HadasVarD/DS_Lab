@@ -18,7 +18,7 @@ library(scales)
 
 ```{r}
 #| output: false
-lang <- read_csv("languages.csv")
+lang <- read_csv("data/languages.csv")
 ```
 
 ## Glimpsing
