@@ -1,0 +1,48 @@
+---
+title: "Week 1 - Languages"
+author: "Tomer Zipori"
+format: html
+editor: visual
+---
+
+## Loading libraries
+
+```{r}
+#| output: false
+library(tidyverse)
+library(ggrepel)
+library(scales)
+```
+
+## Loading data
+
+```{r}
+#| output: false
+lang <- read_csv("languages.csv")
+```
+
+## Glimpsing
+
+```{r}
+glimpse(lang)
+```
+
+## Tidying & test-plotting
+
+```{r}
+#| warning: false
+lang |>
+  select(title, appeared, number_of_users, number_of_jobs) |>
+  filter(appeared >= 1980 & number_of_users >= mean(number_of_users, na.rm = T) & number_of_jobs %in% c(1000: 100000)) |>
+  ggplot(aes(x = number_of_jobs/1000, y = number_of_users/1000, col = appeared)) +
+  geom_point(size = 3) +
+  geom_label_repel(aes(label = title),
+                  box.padding   = 0.35, 
+                  point.padding = 0.5,
+                  nudge_y = 700,
+                  label.size = NA,
+                  max.overlaps = 15,
+                  segment.color = 'grey50') +
+  scale_color_gradient(low = muted("red", l = 30, c = 100), high = muted("blue", l = 18, c = 60)) +
+  theme_classic()
+```
