@@ -1,5 +1,5 @@
 ---
-title: "Week 1 - Languages"
+title: "Week 1 - Computer Languages"
 author: "Tomer Zipori"
 format: html
 editor: visual
@@ -18,7 +18,7 @@ library(scales)
 
 ```{r}
 #| output: false
-lang <- read_csv("data/languages.csv")
+lang <- read_csv("languages.csv")
 ```
 
 ## Glimpsing
@@ -34,6 +34,9 @@ glimpse(lang)
 lang |>
   select(title, appeared, number_of_users, number_of_jobs) |>
   filter(appeared >= 1980 & number_of_users >= mean(number_of_users, na.rm = T) & number_of_jobs %in% c(1000: 100000)) |>
+  mutate(appeared = case_when(appeared >= 1995 ~ 1995,
+                              appeared <= 1990 ~ 1990,
+                              T ~ appeared)) |>
   ggplot(aes(x = number_of_jobs/1000, y = number_of_users/1000, col = appeared)) +
   geom_point(size = 3) +
   geom_label_repel(aes(label = title),
