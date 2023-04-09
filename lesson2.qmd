@@ -4,13 +4,16 @@ format: html
 editor: visual
 author: "Tomer Zipori"
 ---
+
 ### Loading libraries
+
 ```{r}
 #| output: false
 library(tidyverse)
 ```
 
 ### Loading Data
+
 ```{r}
 data <- read.csv("data/artists.csv")
 
@@ -18,9 +21,11 @@ glimpse(data)
 ```
 
 ### The 'Artists' dataset
-From the 'tidytuesday' Github repo: The 'Artists' dataset contains various information about artists by edition of Gardner or Janson’s art history textbook from 1926 until 2020. Data includes demographic information, space occupied in the textbook, as well as presence in the MoMA and Whitney museums.
+
+From the 'tidytuesday' Github repo: The 'Artists' dataset contains various information about artists by edition of Gardner or Janson's art history textbook from 1926 until 2020. Data includes demographic information, space occupied in the textbook, as well as presence in the MoMA and Whitney museums.
 
 ### Cleaning
+
 ```{r}
 data_clean <- data %>%
   select(year, artist_gender, artist_race_nwi, space_ratio_per_page_total) %>%
@@ -34,6 +39,7 @@ data_clean <- data_clean %>%
 ```
 
 ### Plotting
+
 ```{r}
 plot <- data_clean %>%
   ggplot(aes(x = year, y = space_ratio, fill = artist_identity, col = artist_identity)) +
