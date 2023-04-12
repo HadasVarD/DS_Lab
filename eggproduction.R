@@ -58,24 +58,30 @@ plot <- egg_clean2 %>%
   geom_density(position = 'stack', stat = 'identity') +
   geom_point(data = subset_for_points) +
   geom_text(data = subset_for_points, aes(label = round(n_hens/1000000)), hjust = 0.5, vjust = -1, size = 6, family = "serif") +
-  scale_fill_manual(values = c("#f8f8fa", "#e1bf92")) +
-  scale_color_manual(values = c("#898da5", "#b48811")) +
+  scale_fill_manual(values = c("#ffefd5", "#e1bf92")) +
+  scale_color_manual(values = c("#e1bf92", "#83502e")) +
   annotate(geom = "text", x = as_date("2019/1/1"), y = 30, label = "Cage-Free", color = "#808080",
            family = "Stencil", angle = 2.5, size = 15, alpha = 0.5) +
   annotate(geom = "text", x = as_date("2019/1/1"), y = 190, label = "Traditional", color = "#808080",
            family = "Stencil", angle = 2.5, size = 15, alpha = 0.5) +
   scale_x_date(breaks = dates_for_plot) +
   xlab("") +
-  ylab("Number of hens (millions)") +
+  ylab("Number of egg-producing hens (millions)") +
   labs(fill = "Housing", title = "Number of Cage-free hens in the US is constatly rising",
-       subtitle = "Relative number of Cage-free hens in the US in the years 2016-2021") +
+       subtitle = "Relative number of Cage-free hens in the US in the years 2016-2021",
+       caption = "Tomer Zipori | #TidyTuesday | Source: The Humane League's US Egg Production dataset") +
   guides(color = "none", fill = "none") +
+  #annotate(geom = "text", x = as_date("2019/4/1"), y = -30, label = "Tomer Zipori | #TidyTuesday | Source: The Humane League's US Egg Production dataset") +
   theme_classic() +
-  theme(axis.title = element_text(size = 15),
-        axis.text.x = element_text(size = 13),
-        axis.text.y = element_text(size = 13),
-        plot.title = element_text(hjust = 0.5, size = 16),
-        plot.subtitle = element_text(hjust = 0.5, size = 13, family = "serif"))
+  theme(axis.title = element_text(size = 15, color = "#83502e"),
+        axis.text.x = element_text(size = 13, color = "#83502e"),
+        axis.text.y = element_text(size = 13, color = "#83502e"),
+        plot.title = element_text(hjust = 0.5, size = 18, color = "#83502e"),
+        plot.subtitle = element_text(hjust = 0.5, size = 13, family = "serif", color = "#83502e"),
+        plot.caption = element_text(family = "serif", color = "#83502e"),
+        plot.margin = margin(0.5,0.5,0.5,0.7, "cm"),
+        plot.background = element_rect(fill = "#fffaf0"),
+        panel.background = element_rect(fill = "#fffaf0"))
 plot
 
 # Saving
