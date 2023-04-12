@@ -73,7 +73,7 @@ plot <- egg_clean2 %>%
   guides(color = "none", fill = "none") +
   #annotate(geom = "text", x = as_date("2019/4/1"), y = -30, label = "Tomer Zipori | #TidyTuesday | Source: The Humane League's US Egg Production dataset") +
   theme_classic() +
-  theme(axis.title = element_text(size = 15, color = "#83502e"),
+  theme(axis.title = element_text(size = 16, color = "#83502e"),
         axis.text.x = element_text(size = 13, color = "#83502e"),
         axis.text.y = element_text(size = 13, color = "#83502e"),
         plot.title = element_text(hjust = 0.5, size = 18, color = "#83502e"),
