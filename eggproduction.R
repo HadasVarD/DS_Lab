@@ -62,7 +62,7 @@ plot <- egg_clean2 %>%
   scale_color_manual(values = c("#e1bf92", "#83502e")) +
   annotate(geom = "text", x = as_date("2019/1/1"), y = 30, label = "Cage-Free", color = "#808080",
            family = "Stencil", angle = 2.5, size = 15, alpha = 0.5) +
-  annotate(geom = "text", x = as_date("2019/1/1"), y = 190, label = "Traditional", color = "#808080",
+  annotate(geom = "text", x = as_date("2019/1/1"), y = 190, label = "Caged", color = "#808080",
            family = "Stencil", angle = 2.5, size = 15, alpha = 0.5) +
   scale_x_date(breaks = dates_for_plot) +
   xlab("") +
