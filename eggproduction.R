@@ -1,13 +1,12 @@
 ##### Libraries ----
 # install.packages("tidytuesdayR")
 # install.packages("tidyverse")
+# install.packages("lubridate")
+# install.packages("showtext")
 library(tidytuesdayR)
 library(tidyverse)
-library(ggstream)
 library(lubridate)
-library(ggthemes)
 library(showtext)
-library(survival)
 
 ##### Data Loading ----
 eggproduction  <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-04-11/egg-production.csv')
@@ -32,6 +31,7 @@ egg_clean2 <- cagefreepercentages %>%
 ##### Loading fonts ----
 font_add(family = "Stencil", regular = "STENCIL.TTF")
 showtext_auto()
+
 
 ##### Plotting ----
 #### Defining dates to show in plot
@@ -71,7 +71,6 @@ plot <- egg_clean2 %>%
        subtitle = "Relative number of Cage-free hens in the US in the years 2016-2021",
        caption = "Tomer Zipori | #TidyTuesday | Source: The Humane League's US Egg Production dataset") +
   guides(color = "none", fill = "none") +
-  #annotate(geom = "text", x = as_date("2019/4/1"), y = -30, label = "Tomer Zipori | #TidyTuesday | Source: The Humane League's US Egg Production dataset") +
   theme_classic() +
   theme(axis.title = element_text(size = 16, color = "#83502e"),
         axis.text.x = element_text(size = 13, color = "#83502e"),
@@ -84,6 +83,7 @@ plot <- egg_clean2 %>%
         panel.background = element_rect(fill = "#fffaf0"))
 plot
 
-# Saving
+
+##### Saving ----
 ggsave("eggs.png", plot, path = "plots/", height = 1003, width = 1600, units = "px", dpi = 96)
 
