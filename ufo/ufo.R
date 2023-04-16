@@ -5,6 +5,7 @@ library(tidytuesdayR)
 library(maps)
 library(lubridate)
 library(jpeg)
+library(ggimage)
 library(showtext)
 library(patchwork)
 
@@ -12,10 +13,10 @@ library(patchwork)
 ##### Loading data ----
 ufo_sightings <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-06-25/ufo_sightings.csv")
 usa <- map_data("state")
-state_codes <- read_csv("state_code.csv") %>%
+state_codes <- read_csv("ufo/state_code.csv") %>%
   select(state, code) %>%
   mutate(state = tolower(state), code = tolower(code))
-uspop <- read_excel("data/uspop.xlsx",col_names = c("region", "pop_2010", "pop_2011", "pop_2012", "pop_2013", "pop_2014")) %>%
+uspop <- read_excel("ufo/uspop.xlsx",col_names = c("region", "pop_2010", "pop_2011", "pop_2012", "pop_2013", "pop_2014")) %>%
   mutate(region = tolower(str_remove(region, "."))) %>%
   rowwise() %>%
   mutate(mean_pop = mean(c(pop_2010, pop_2011, pop_2012, pop_2013, pop_2014))) %>%
@@ -38,9 +39,10 @@ ufo_sightings <- ufo_sightings %>%
 
 
 # Some globals for ease
-nightsky_img <- "data/nightsky2.jpg"
-font_files() %>% tibble() %>% filter(str_detect(family, "Showcard Gothic"))
+nightsky_img <- "ufo/nightsky2.jpg"
+#font_files() %>% tibble() %>% filter(str_detect(family, "Showcard Gothic"))
 font_add(family = "Showcard Gothic", regular = "SHOWG.TTF")
+font_add(family = "Chiller", regular = "CHILLER.TTF")
 showtext_auto()
 
 ufo <- ufo_sightings %>%
@@ -52,7 +54,6 @@ ufo <- ufo_sightings %>%
   drop_na(decade)
 
 
-##### Plotting ----
 ##### Cases by state in 2000-2010 ----
 ## Data preprocessing
 by_state <- ufo %>%
@@ -60,7 +61,7 @@ by_state <- ufo %>%
     summarise(cases = n(),
               .groups = "drop")
   
-by_state2 <- left_join(usa, by_state, by = c("region" = "state")) %>%
+by_state2 <- left_join(usa, by_state, by = c("region" = "state"), multiple = "all") %>%
   filter(decade %in% c(2000, 2010)) %>%
     left_join(uspop, by = "region")
   
@@ -86,16 +87,27 @@ plot <- ggplot(by_state2, aes(x = long, y = lat, fill = cases_per_capita, group 
        caption = "Tomer Zipori | #TidyTuesday | Source: National UFO Reporting Center") +
   coord_fixed(1.3, clip = "off") +
   theme_minimal() +
-  annotate("label", x = -130, y = 45, label = "Washington is spooky!\n # of cases: 1,228,975\n Mean population: 6,897,031 \n Cases per capita: 0.18", color = "#5dff00", fill = "black", family = "serif", fontface = "bold") +
-  annotate("segment", x = -127.5, y = 46.4, xend = -124.48, yend = 47.4, color = "#5dff00",
-           arrow = arrow(type = "closed", length = unit(0.02, "npc"))) +
+  annotate("label", x = -130, y = 45.4, label = "Washington is spooky!\n # of cases: 1,228,975\n Cases per capita: 0.18",
+           color = "#5dff00", fill = "black", family = "serif", fontface = "bold") +
+  geom_curve(aes(x = -127.5, y = 46.4, xend = -124.48, yend = 47.4), color = "#5dff00", linewidth = 1, curvature = -0.35,
+             arrow = arrow(type = "closed", length = unit(0.02, "npc"))) +
+  annotate("label", x = -124, y = 30.4, label = "Utah has the lowest rate in the US\n # of cases: 22,715\n Cases per capita: 0.0079",
+           color = "#5dff00", fill = "black", family = "serif", fontface = "bold") +
+  geom_curve(aes(x = -119.4, y = 31.4, xend = -111.5, yend = 39), color = "#5dff00", linewidth = 1, curvature = 0.3,
+             arrow = arrow(type = "closed", length = unit(0.02, "npc"))) +
   theme(plot.title = element_text(size = 24, vjust = -4, hjust = 0.5, color = "#5dff00", family = "Showcard Gothic"),
-        plot.caption = element_text(color = "#5dff00", hjust = 0.95),
+        plot.caption = element_text(color = "#5dff00", hjust = 1.05, family = "serif", size = 9),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         panel.grid = element_blank(),
-        legend.position = "bottom", legend.box = "horizontal", legend.text = element_text(color = "#5dff00"))
-ggbackground(plot, nightsky_img)
+        legend.position = "bottom", legend.box = "horizontal", legend.text = element_text(color = "#5dff00", family = "mono", size = 14))
+plot <- ggbackground(plot, nightsky_img)
+
+plot
+
+
+##### Saving ----
+ggsave(filename = "ufo.png", plot = plot, path = "plots/", height = 1009, width = 1920, dpi = 96, units = "px")
 

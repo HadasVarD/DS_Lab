@@ -18,7 +18,8 @@ library(scales)
 
 ```{r}
 #| output: false
-lang <- read_csv("languages.csv")
+lang <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-03-21/languages.csv')
+
 ```
 
 ## Glimpsing
