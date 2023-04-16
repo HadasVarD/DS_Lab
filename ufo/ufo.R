@@ -7,7 +7,6 @@ library(lubridate)
 library(jpeg)
 library(ggimage)
 library(showtext)
-library(patchwork)
 
 
 ##### Loading data ----
