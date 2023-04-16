@@ -15,7 +15,7 @@ usa <- map_data("state")
 state_codes <- read_csv("ufo/state_code.csv") %>%
   select(state, code) %>%
   mutate(state = tolower(state), code = tolower(code))
-uspop <- read_excel("ufo/uspop.xlsx",col_names = c("region", "pop_2010", "pop_2011", "pop_2012", "pop_2013", "pop_2014")) %>%
+uspop <- read_excel("ufo/uspop.xlsx", col_names = c("region", "pop_2010", "pop_2011", "pop_2012", "pop_2013", "pop_2014")) %>%
   mutate(region = tolower(str_remove(region, "."))) %>%
   rowwise() %>%
   mutate(mean_pop = mean(c(pop_2010, pop_2011, pop_2012, pop_2013, pop_2014))) %>%
@@ -41,7 +41,6 @@ ufo_sightings <- ufo_sightings %>%
 nightsky_img <- "ufo/nightsky2.jpg"
 #font_files() %>% tibble() %>% filter(str_detect(family, "Showcard Gothic"))
 font_add(family = "Showcard Gothic", regular = "SHOWG.TTF")
-font_add(family = "Chiller", regular = "CHILLER.TTF")
 showtext_auto()
 
 ufo <- ufo_sightings %>%
