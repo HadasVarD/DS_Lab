@@ -4,3 +4,52 @@ author: "Tomer & Hadas"
 format: html
 editor: visual
 ---
+## Libraries
+```{r}
+#| output: false
+#| warning: false
+library(tidyverse)
+library(lubridate)
+```
+
+# COVID-19 Data
+Loading the COVID datasets, combining them (we won't do any ML in this project), and inspecting the first values:
+```{r}
+test <- read_csv("data/Covid19/test.csv")
+test_labels <- read_csv("data/Covid19/submission.csv")
+
+test <- inner_join(test, test_labels, by = "ForecastId") %>% # Adding test labels
+  rename(Id = ForecastId)
+train <- read_csv("data/Covid19/train.csv")
+
+covid19 <- rbind(train, test) %>%
+  select(Country = "Country/Region", Date, ConfirmedCases) %>%
+  arrange(Date)
+
+head(covid19)
+```
+
+# Filtering
+Leaving countries that had at least 50 confirmed case, and had at least 14 days of data beyond reaching those 50 cases:
+```{r}
+covid19 <- covid19 %>%
+  filter(ConfirmedCases >= 50) %>%
+  group_by(Country, Date) %>%
+  summarise(ConfirmedCases = sum(ConfirmedCases),
+            .groups = "drop") %>%
+  group_by(Country) %>%
+  mutate(days_beyond_50 = n()) %>%
+  ungroup() %>%
+  filter(days_beyond_50 >= 14)
+
+length(unique(covid19$Country)) # How many countries are left?
+  
+```
+
+
+
+
+
+
+
+
