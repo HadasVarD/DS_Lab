@@ -10,7 +10,6 @@ editor: visual
 ```{r}
 #| output: false
 #| warning: false
-#| echo: false
 #install.packages("lm.beta")
 library(tidyverse)
 library(lubridate)
@@ -38,6 +37,7 @@ covid19 <- rbind(train, test) %>%
 country_codes <- country_codes %>%
   select(Country = `English short name lower case`, country_code = `Alpha-2 code`)
 
+rm(list = c("train", "test", "test_labels"))
 
 head(covid19)
 ```
@@ -96,9 +96,10 @@ negatively_keyed <- c('EXT2', 'EXT4', 'EXT6', 'EXT8', 'EXT10', 'EST2', 'EST4', '
 big5[,negatively_keyed] <- 6 - big5[,negatively_keyed]
 ```
 
-
 ## Aggregate BIG-5 observations per country
+
 Filtering to get only the countries with at least 1000 observations
+
 ```{r}
 obs_per_country <- big5 %>%
   group_by(country_code) %>%
@@ -108,6 +109,7 @@ obs_per_country <- big5 %>%
 ```
 
 Filtering the big dataset, and averaging each big5 dimension per country
+
 ```{r}
 big5 <- filter(big5, country_code %in% obs_per_country$country_code)
 
@@ -119,6 +121,7 @@ opn <- paste0(rep("OPN", 11), c(1:10))
 ```
 
 Aggregating big5 dimensions per country
+
 ```{r}
 big5_per_country <- big5 %>%
   mutate(ext = rowMeans(select(big5, all_of(ext))),
@@ -132,9 +135,12 @@ big5_per_country <- big5 %>%
             agr = mean(agr, na.rm = T),
             csn = mean(csn, na.rm = T),
             opn = mean(opn, na.rm = T))
+
+rm(big5)
 ```
 
 ## Plotting top-5 countries by average Extraverion score
+
 ```{r}
 top5_ext <- big5_per_country %>%
   arrange(desc(ext)) %>%
@@ -148,7 +154,9 @@ ggplot(top5_ext, aes(x = factor(country_code, levels = c("SE", "NZ", "DK", "NL",
   coord_flip() +
   labs(x = "country", y = "")
 ```
+
 ## Merging the big5 data with the covid19 data
+
 ```{r}
 covid19 <- left_join(covid19, big5_per_country, by = c("country_code"))
 
@@ -156,6 +164,7 @@ head(covid19)
 ```
 
 ### Adding column of the 14th day after the first 50 cases
+
 ```{r}
 #| warning: false
 covid19_for_plots <- covid19 %>%
@@ -167,15 +176,18 @@ covid19_for_plots <- covid19 %>%
 ```
 
 ## Cases at 14 days after the first 50 cases, by Extraversion
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ ext, data = covid19_for_plots))
 lm.beta(lm(ConfirmedCases ~ ext, data = covid19_for_plots))
 ```
-p.value = 0.55
-cor = 0.131
+
+p.value = 0.55 cor = 0.131
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_ext <- round(min(covid19_for_plots$ext, na.rm = T), 2)
@@ -194,15 +206,18 @@ ggplot(covid19_for_plots, aes(x = ext, y = ConfirmedCases)) +
 ```
 
 ## Cases at 14 days after the first 50 cases, by Emotional Stability
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ est, data = covid19_for_plots))
 lm.beta(lm(ConfirmedCases ~ est, data = covid19_for_plots))
 ```
-p.value = 0.238
-cor = -0.255
+
+p.value = 0.238 cor = -0.255
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_est <- round(min(covid19_for_plots$est, na.rm = T), 2)
@@ -219,16 +234,20 @@ ggplot(covid19_for_plots, aes(x = est, y = ConfirmedCases)) +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 ## Cases at 14 days after the first 50 cases, by Agreeableness
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ agr, data = covid19_for_plots))
 lm.beta(lm(ConfirmedCases ~ agr, data = covid19_for_plots))
 ```
-p.value = 0.51
-cor = 0.144
+
+p.value = 0.51 cor = 0.144
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_agr <- round(min(covid19_for_plots$agr, na.rm = T), 2)
@@ -245,16 +264,20 @@ ggplot(covid19_for_plots, aes(x = agr, y = ConfirmedCases)) +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 ## Cases at 14 days after the first 50 cases, by CON
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ csn, data = covid19_for_plots))
 lm.beta(lm(ConfirmedCases ~ csn, data = covid19_for_plots))
 ```
-p.value = 0.80
-cor = -0.06
+
+p.value = 0.80 cor = -0.06
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_csn <- round(min(covid19_for_plots$csn, na.rm = T), 2)
@@ -273,15 +296,18 @@ ggplot(covid19_for_plots, aes(x = csn, y = ConfirmedCases)) +
 ```
 
 ## Cases at 14 days after the first 50 cases, by Openness
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ opn, data = covid19_for_plots))
 lm.beta(lm(ConfirmedCases ~ opn, data = covid19_for_plots))
 ```
-p.value = 0.56
-cor = -0.13
+
+p.value = 0.56 cor = -0.13
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_opn <- round(min(covid19_for_plots$opn, na.rm = T), 2)
@@ -300,20 +326,23 @@ ggplot(covid19_for_plots, aes(x = opn, y = ConfirmedCases)) +
 ```
 
 # Filtering out China
+
 ```{r}
 covid19_for_plots_no_china <- covid19_for_plots %>%
   filter(Country != "China")
 ```
 
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ ext, data = covid19_for_plots_no_china))
 lm.beta(lm(ConfirmedCases ~ ext, data = covid19_for_plots_no_china))
 ```
-p.value = 0.92
-cor = 0.02
+
+p.value = 0.92 cor = 0.02
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_ext <- round(min(covid19_for_plots_no_china$ext, na.rm = T), 2)
@@ -332,15 +361,18 @@ ggplot(covid19_for_plots_no_china, aes(x = ext, y = ConfirmedCases)) +
 ```
 
 ## Cases at 14 days after the first 50 cases, by Emotional Stability
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ est, data = covid19_for_plots_no_china))
 lm.beta(lm(ConfirmedCases ~ est, data = covid19_for_plots_no_china))
 ```
-p.value = 0.63
-cor = -0.11
+
+p.value = 0.63 cor = -0.11
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_est <- round(min(covid19_for_plots_no_china$est, na.rm = T), 2)
@@ -357,16 +389,20 @@ ggplot(covid19_for_plots_no_china, aes(x = est, y = ConfirmedCases)) +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 ## Cases at 14 days after the first 50 cases, by Agreeableness
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ agr, data = covid19_for_plots_no_china))
 lm.beta(lm(ConfirmedCases ~ agr, data = covid19_for_plots_no_china))
 ```
-p.value = 0.56
-cor = 0.13
+
+p.value = 0.56 cor = 0.13
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_agr <- round(min(covid19_for_plots_no_china$agr, na.rm = T), 2)
@@ -383,16 +419,20 @@ ggplot(covid19_for_plots_no_china, aes(x = agr, y = ConfirmedCases)) +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 ## Cases at 14 days after the first 50 cases, by CON
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ csn, data = covid19_for_plots_no_china))
 lm.beta(lm(ConfirmedCases ~ csn, data = covid19_for_plots_no_china))
 ```
-p.value = 0.05
-cor = -0.42
+
+p.value = 0.05 cor = -0.42
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_csn <- round(min(covid19_for_plots_no_china$csn, na.rm = T), 2)
@@ -411,15 +451,18 @@ ggplot(covid19_for_plots_no_china, aes(x = csn, y = ConfirmedCases)) +
 ```
 
 ## Cases at 14 days after the first 50 cases, by Openness
+
 ### Linear model
+
 ```{r}
 summary(lm(ConfirmedCases ~ opn, data = covid19_for_plots_no_china))
 lm.beta(lm(ConfirmedCases ~ opn, data = covid19_for_plots_no_china))
 ```
-p.value = 0.008
-cor = 0.55
+
+p.value = 0.008 cor = 0.55
 
 ### Plot
+
 ```{r}
 #| warning: false
 min_opn <- round(min(covid19_for_plots_no_china$opn, na.rm = T), 2)
@@ -438,6 +481,7 @@ ggplot(covid19_for_plots_no_china, aes(x = opn, y = ConfirmedCases)) +
 ```
 
 ## Openness seems to moderate confirmed Covid cases 14 days after the first 50
+
 ```{r}
 covid19_opn <- covid19_for_plots %>%
   select(Country, Openness = opn, ConfirmedCases) %>%
@@ -446,11 +490,82 @@ covid19_opn <- covid19_for_plots %>%
 head(covid19_opn, n = 14)
 ```
 
+## Animated map
 
+### Loading fonts and gganimate library
 
+```{r}
+#| warning: false
+library(showtext)
+library(gganimate)
+```
 
+### Plotting
 
+```{r}
+# data
+covid19_animated <- covid19 %>%
+  filter(Country != "China") %>%
+  select(Country, Date, ConfirmedCases, opn) %>%
+  group_by(Date) %>%
+  arrange(Date, -ConfirmedCases) %>%
+  mutate(rank = 1:n())
 
+# min/max openness values
+min_opn <- min(covid19_animated$opn, na.rm = T)
+max_opn <- max(covid19_animated$opn, na.rm = T)
 
+# Colors
+legend_high_col <- "#8ff9ff"
+legend_low_col <- "#1b2c2d"
+date_text_col <- "gray18"
+country_text_col <- "gray13"
+p_background_col <- "#f0f8ff"
 
+# plot
+plot1 <- covid19_animated %>%
+  ggplot() +
+  aes(xmin = 0, xmax = ConfirmedCases) +
+  aes(ymin = rank - .45, ymax = rank + .45, y = rank) +
+  geom_rect(alpha = .7) +
+  aes(fill = opn) +  
+  scale_x_continuous(limits = c(-15000, max(covid19_animated$ConfirmedCases))) +  
+  geom_text(col = country_text_col, hjust = "right", aes(label = Country), x = -100, family = "serif", size = 5) +
+  scale_y_reverse() +
+  guides(fill = guide_colorbar(title = "Mean national\nOpenness", title.hjust = 0.5, ticks = F)) +
+  scale_fill_continuous(low = legend_low_col, high = legend_high_col, labels = round(seq(min_opn, max_opn, 0.2), 2),
+                        breaks = seq(min_opn+0.1, max_opn, 0.18), limits = c(min_opn, max_opn)) +
+  geom_text(x = 46500, y = -32, family = "mono", aes(label = Date), size = 24, col = date_text_col) +
+  theme_classic() +
+  labs(title = "Covid-19 spreads faster in countries with high mean Opennes",
+       subtitle = "Comulative cases in 14 days in different countries, with colors representing national mean trait Opennes",
+       caption = "Tomer Zipori & Hadas Wardi | Big-5 and Covid-19 data is from Kaggle") +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(family = "serif", size = 13),
+        axis.ticks.y = element_blank(),
+        legend.title = element_text(family = "serif", size = 18),
+        legend.text = element_text(family = "mono", size = 13),
+        plot.title = element_text(family = "serif", size = 30, hjust = 0.7),
+        plot.subtitle = element_text(family = "serif", size = 19, hjust = 0.7),
+        plot.caption = element_text(family = "serif", size = 10),
+        plot.caption.position = "plot",
+        plot.background = element_rect(fill = p_background_col),
+        panel.background = element_rect(fill = p_background_col),
+        legend.background = element_rect(fill = p_background_col, color = "black"),
+        legend.key.height = unit(2.5, "cm"),
+        plot.margin = unit(c(5,5,5,5), "mm")) +
+  aes(group = Country) +
+  gganimate::transition_time(Date)
 
+plot1 <- animate(plot1, fps = 5, end_pause = 50, width = 1200, height = 900)
+
+# saving
+#anim_save("plots/covid19_big5.gif", plot1)
+```
+
+# Spread of Covid-19 around the world
+## Mean national opennes is related to faster growth
+```{r}
+plot1
+```
