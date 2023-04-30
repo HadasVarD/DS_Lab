@@ -64,7 +64,11 @@ length(unique(covid19$Country)) # How many countries are left?
 
 ```{r}
 covid19 <- covid19 %>%
-  left_join(country_codes, by = c("Country"))
+  left_join(country_codes, by = c("Country")) %>%
+  mutate(country_code = case_when(Country == "Korea, South" ~ "KR", 
+                                  Country == "US" ~ "US", # Two countries had different names so didn't merge right
+                                  .default = country_code))
+
 
 head(covid19)
 ```
@@ -412,8 +416,8 @@ ggplot(covid19_for_plots_no_china, aes(x = agr, y = ConfirmedCases)) +
   geom_point(color = "#0000AA", size = 2) +
   geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
   scale_y_continuous(limits = c(-1000, 6500), breaks = seq(0, 6500, 1000)) +
-  scale_x_continuous(limits = c(min_agr, max_agr), breaks = seq(3.62, 3.76, 0.02)) +
-  coord_cartesian(xlim = c(min_agr, max_agr), ylim = c(-500, 6500)) +
+  scale_x_continuous(limits = c(3.64, max_agr), breaks = seq(3.64, 3.76, 0.02)) +
+  coord_cartesian(xlim = c(3.64, max_agr), ylim = c(-500, 6500)) +
   xlab("AGR") +
   ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Agreeableness\nr=0.13, p=0.56") +
   theme_classic() +
@@ -506,14 +510,12 @@ library(gganimate)
 # data
 covid19_animated <- covid19 %>%
   filter(Country != "China") %>%
+  drop_na(opn) %>% # omitting countries with no BIG-5 data
   select(Country, Date, ConfirmedCases, opn) %>%
   group_by(Date) %>%
   arrange(Date, -ConfirmedCases) %>%
   mutate(rank = 1:n())
 
-# min/max openness values
-min_opn <- min(covid19_animated$opn, na.rm = T)
-max_opn <- max(covid19_animated$opn, na.rm = T)
 
 # Colors
 legend_high_col <- "#8ff9ff"
@@ -565,7 +567,9 @@ plot1 <- animate(plot1, fps = 5, end_pause = 50, width = 1200, height = 900)
 ```
 
 # Spread of Covid-19 around the world
+
 ## Mean national opennes is related to faster growth
+
 ```{r}
 plot1
 ```
