@@ -1,6 +1,6 @@
 ---
 title: "Excersice 4 - Twitter data"
-author: "Tomer Zipori"
+author: "Tomer Zipori & Hadas Wardi"
 execute: 
   warning: false
   message: false
@@ -21,8 +21,10 @@ editor: visual
 library(tidyverse)
 library(quanteda)
 library(topicmodels)
+library(quanteda.textmodels)
 library(spacyr)
 library(corpustools)
+library(glue)
 ```
 
 # Loading data
@@ -43,7 +45,7 @@ pre_process_text <- function(txt) {
   out <- txt
   
   out <- out |>
-  str_replace_all(pattern = "RT", replacement = "") |> # remove 'RT' prefixes specifying that this is a retweet
+  str_remove_all(pattern = "RT") |> # remove 'RT' prefixes specifying that this is a retweet
   str_remove_all(pattern = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+") |> # regex supposed to capture all urls
   str_remove_all(pattern = "@\\w+ *") |> # removing @ tags
   str_remove_all(pattern = "[[:punct:]]") |> # removing punctuation
@@ -52,6 +54,7 @@ pre_process_text <- function(txt) {
   str_trim() |>
   str_squish() |>
   str_to_lower()
+  
   return(out)
 }
 ```
@@ -66,13 +69,13 @@ corp <- twitts |>
 ## Creating corpus object
 
 ```{r}
-dtm <- corpus(corp, text_field = "text")
+corp <- corpus(corp, text_field = "text")
 ```
 
 # Tokenizing & DTM
 
 ```{r}
-dtm <- dtm |>
+dtm <- corp |>
   tokens() |>
   dfm()
 ```
@@ -101,7 +104,7 @@ Note the difference between $tf-idf$ and proportional weighting...
 
 # Topic modeling
 
-First, removing rare terms.
+First, converting to `topicmodels` object.
 
 ```{r}
 dtm_partial <- dtm |>
@@ -121,35 +124,70 @@ Inspecting some terms and their categorization.
 topicmodels::terms(lda_model, 10)
 ```
 
-Too many stop words. Filtering them out and fitting the LDA model again.
-
+Too many stop words (and numbers). Filtering them out and fitting the LDA model again. We also filtered out rare tokens (less then 10 occurrences).
 ```{r}
-dtm_partial_no_stopwords <- dtm |>
-          dfm_trim() |>
-          dfm_remove(stopwords(language = "en")) |>
-          convert(to = "topicmodels")
+dtm_partial_no_stopwords <- corp |>
+          tokens(remove_numbers = T) |>
+          dfm() |>
+          dfm_remove(stopwords("en")) |>
+          dfm_trim(min_termfreq = 10, termfreq_type = "count")
+
+dtm_no_stopwords_lda <- dtm_partial_no_stopwords |>
+  convert(to = "topicmodels")
 ```
+
 
 Again, topic modeling.
-
 ```{r}
-lda_model_no_stopwords <- topicmodels::LDA(dtm_partial_no_stopwords, method = "Gibbs", k = 10) 
+topic_model_trimed <- topicmodels::LDA(dtm_no_stopwords_lda, method = "Gibbs", k = 5)
 ```
+
 
 Inspecting some terms and their categorization.
-
 ```{r}
-topicmodels::terms(lda_model_no_stopwords, 8)
+topicmodels::terms(topic_model_trimed, 10)
 ```
+
 
 Results are probably affected by the large number of 'non-real' words like: misspelled words, slang etc...
 
 # Differential Language Analysis
 
-## Which tweets got larger exposure?
+## Which tweets get larger exposure?
 
-### Create vaiable that indicates if a tweet has been retweeted or not
-
+Creating vaiable that indicates if a tweet has been retweeted or not
 ```{r}
-docvars(dtm, "retweeted") <- docvars(dtm, "retweetCount") > 0
+docvars(dtm_partial_no_stopwords, "retweeted") <- docvars(dtm_partial_no_stopwords, "retweetCount") > 0
+
+table(docvars(dtm_partial_no_stopwords, "retweeted"))
 ```
+```{r}
+#| echo: false
+base_rate <- glue("${table(docvars(dtm_partial_no_stopwords, 'retweeted'))['TRUE']/(table(docvars(dtm_partial_no_stopwords, 'retweeted'))['FALSE']+table(docvars(dtm_partial_no_stopwords, 'retweeted'))['TRUE'])}$")
+```
+
+Base rate of `r base_rate`.
+
+Train-test splitting.
+```{r}
+train_dtm <- dfm_sample(dtm_partial_no_stopwords, size = 800)
+test_dtm <- dtm_partial_no_stopwords[setdiff(docnames(dtm_partial_no_stopwords), docnames(train_dtm)),]
+```
+
+## Naive-bayes classifier
+```{r}
+nb_model <- textmodel_nb(train_dtm, y = docvars(train_dtm, "retweeted"))
+```
+
+### Test performance
+```{r}
+pred_nb <- predict(nb_model, newdata = test_dtm)
+
+(conmat <- table(pred_nb, docvars(test_dtm, "retweeted")))
+```
+
+Confusion matrix.
+```{r}
+caret::confusionMatrix(conmat, mode = "everything", positive = "TRUE")
+```
+
