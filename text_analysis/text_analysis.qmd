@@ -6,7 +6,7 @@ execute:
   message: false
 format:
   html:
-    theme: darkly
+    theme: cosmo
     toc: true
     toc-depth: 2
     toc-location: right
@@ -35,7 +35,9 @@ twitts <- read_csv("2016-10-16 02-AM.NY.mid.csv", show_col_types = F) |>
 ```
 
 # Pre-processing
+
 ## Function
+
 ```{r}
 pre_process_text <- function(txt) {
   out <- txt
@@ -55,18 +57,20 @@ pre_process_text <- function(txt) {
 ```
 
 ## preprocessing twitts column
+
 ```{r}
 corp <- twitts |>
   mutate(text = pre_process_text(text))
 ```
 
 ## Creating corpus object
+
 ```{r}
 dtm <- corpus(corp, text_field = "text")
 ```
 
-
 # Tokenizing & DTM
+
 ```{r}
 dtm <- dtm |>
   tokens() |>
@@ -76,6 +80,7 @@ dtm <- dtm |>
 ## DTM Weighting
 
 ### Binary (Boolean) weighting
+
 ```{r}
 dtm |> dfm_weight(scheme = "boolean")
 ```
@@ -139,18 +144,12 @@ topicmodels::terms(lda_model_no_stopwords, 8)
 
 Results are probably affected by the large number of 'non-real' words like: misspelled words, slang etc...
 
-
 # Differential Language Analysis
+
 ## Which tweets got larger exposure?
+
 ### Create vaiable that indicates if a tweet has been retweeted or not
+
 ```{r}
 docvars(dtm, "retweeted") <- docvars(dtm, "retweetCount") > 0
 ```
-
-
-
-
-
-
-
-
