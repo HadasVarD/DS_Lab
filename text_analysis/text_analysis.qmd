@@ -1,0 +1,156 @@
+---
+title: "Excersice 4 - Twitter data"
+author: "Tomer Zipori"
+execute: 
+  warning: false
+  message: false
+format:
+  html:
+    theme: darkly
+    toc: true
+    toc-depth: 2
+    toc-location: right
+    embed-resources: true
+editor: visual
+---
+
+# Setup
+
+```{r}
+#| output: false
+library(tidyverse)
+library(quanteda)
+library(topicmodels)
+library(spacyr)
+library(corpustools)
+```
+
+# Loading data
+
+```{r}
+#| output: false
+twitts <- read_csv("2016-10-16 02-AM.NY.mid.csv", show_col_types = F) |>
+  rename(doc_id = '...1') # renaming ID column
+
+```
+
+# Pre-processing
+## Function
+```{r}
+pre_process_text <- function(txt) {
+  out <- txt
+  
+  out <- out |>
+  str_replace_all(pattern = "RT", replacement = "") |> # remove 'RT' prefixes specifying that this is a retweet
+  str_remove_all(pattern = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+") |> # regex supposed to capture all urls
+  str_remove_all(pattern = "@\\w+ *") |> # removing @ tags
+  str_remove_all(pattern = "[[:punct:]]") |> # removing punctuation
+  str_replace_all(pattern = "<.*>", replacement = " ") |> # replace unicoded emojis with spaces
+  str_remove_all(pattern = "[^[:alnum:] ]") |> # now it is possible to remove everything that is not a letter or digit
+  str_trim() |>
+  str_squish() |>
+  str_to_lower()
+  return(out)
+}
+```
+
+## preprocessing twitts column
+```{r}
+corp <- twitts |>
+  mutate(text = pre_process_text(text))
+```
+
+## Creating corpus object
+```{r}
+dtm <- corpus(corp, text_field = "text")
+```
+
+
+# Tokenizing & DTM
+```{r}
+dtm <- dtm |>
+  tokens() |>
+  dfm()
+```
+
+## DTM Weighting
+
+### Binary (Boolean) weighting
+```{r}
+dtm |> dfm_weight(scheme = "boolean")
+```
+
+### Proportional weighting
+
+```{r}
+dtm |> dfm_weight(scheme = "prop")
+```
+
+### tf-idf weighting
+
+```{r}
+dtm |> dfm_tfidf()
+```
+
+Note the difference between $tf-idf$ and proportional weighting...
+
+# Topic modeling
+
+First, removing rare terms.
+
+```{r}
+dtm_partial <- dtm |>
+  dfm_trim() |>
+  convert(to = "topicmodels")
+```
+
+Now, topic modeling.
+
+```{r}
+lda_model <- topicmodels::LDA(dtm_partial, method = "Gibbs", k = 10) 
+```
+
+Inspecting some terms and their categorization.
+
+```{r}
+topicmodels::terms(lda_model, 10)
+```
+
+Too many stop words. Filtering them out and fitting the LDA model again.
+
+```{r}
+dtm_partial_no_stopwords <- dtm |>
+          dfm_trim() |>
+          dfm_remove(stopwords(language = "en")) |>
+          convert(to = "topicmodels")
+```
+
+Again, topic modeling.
+
+```{r}
+lda_model_no_stopwords <- topicmodels::LDA(dtm_partial_no_stopwords, method = "Gibbs", k = 10) 
+```
+
+Inspecting some terms and their categorization.
+
+```{r}
+topicmodels::terms(lda_model_no_stopwords, 8)
+```
+
+Results are probably affected by the large number of 'non-real' words like: misspelled words, slang etc...
+
+
+# Differential Language Analysis
+## Which tweets got larger exposure?
+### Create vaiable that indicates if a tweet has been retweeted or not
+```{r}
+docvars(dtm, "retweeted") <- docvars(dtm, "retweetCount") > 0
+```
+
+
+
+
+
+
+
+

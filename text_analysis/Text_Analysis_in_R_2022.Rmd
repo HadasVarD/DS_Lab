@@ -1,0 +1,226 @@
+## About this document
+
+This my edit to the online appendix for [Welbers, van Atteveldt & Benoit (2017)](http://www.tandfonline.com/doi/full/10.1080/19312458.2017.1387238), that contains the example code presented in the article. The code in this appendix will be kept up-to-date with changes in the used packages, and as such can differ slightly from the code presented in the article.
+
+In addition, this appendix contains references to other tutorials, that provide additional instructions for alternative, more in-dept or newly developed text anaysis operations.
+
+### required packages
+
+The following packages have to be installed to run all the code examples. Note that the lines to install the packages only have to be run once.
+
+```{r, eval=F}
+################# PACKAGE       # SECTION IN ARTICLE
+install.packages("readtext")    # data preparation
+install.packages("stringi")     # data preparation
+install.packages("quanteda")    # data preparation and analysis
+install.packages("topicmodels") # analysis
+install.packages("spacyr")      # advanced topics
+install.packages("corpustools") # advanced topics
+```
+
+## Data Preparation
+
+### String Operations
+
+```{r}
+library(readtext)  
+# url to Inaugural Address demo data that is provided by the readtext package 
+filepath <- "https://raw.githubusercontent.com/kbenoit/readtext/master/inst/extdata/csv/inaugCorpus.csv"
+
+rt <- readtext(filepath, text_field = "texts") 
+rt
+```
+
+### String Operations
+
+```{r}
+library(stringi) 
+x <- c("The first string", ' The <font size="6">second string</font>') 
+
+x <- stri_replace_all(x, "", regex = "<.*?>")   # remove html tags 
+x <- stri_trim(x)                               # strip surrounding whitespace
+x <- stri_trans_tolower(x)                      # transform to lower case 
+x
+```
+
+### Preprocessing
+```{r}
+library(stringr)
+library(textclean)
+```
+
+
+#### Tokenization
+
+```{r}
+library(quanteda) 
+
+text <- "An example of preprocessing techniques" 
+toks <- tokens(text)  # tokenize into unigrams 
+t <- 'בע"ח'
+tokens(t)
+toks
+```
+
+#### Normalization: lowercasing and stemming
+
+```{r}
+toks <- tokens_tolower(toks) 
+toks <- tokens_wordstem(toks) 
+toks
+```
+
+#### Removing stopwords
+
+```{r}
+sw <- stopwords("english")   # get character vector of stopwords 
+head(sw)                     # show head (first 6) stopwords
+tokens_remove(toks, sw)
+```
+
+### Document-Term Matrix
+
+```{r}
+text <-  c(d1 = "An example of preprocessing techniques",  
+           d2 = "An additional example",  
+           d3 = "A third example") 
+
+tokens(text) %>% # input text
+  tokens_tolower() %>% #lower_casing
+  dfm() %>% #create document-feature-matrix
+  dfm_remove(stopwords("english")) %>% #remove stopwords
+  dfm_wordstem() #stem
+
+
+#we can also lemmatize
+
+toks_2 <- tokens(text, remove_punct = TRUE, 
+                 remove_numbers = TRUE,
+                 remove_url = TRUE, 
+                 remove_separators = TRUE, 
+                 remove_symbols = TRUE) %>%
+    tokens_tolower() %>% 
+    tokens_replace(pattern = lexicon::hash_lemmas$token, replacement = lexicon::hash_lemmas$lemma)
+
+dfm_3 <- tokens(data_corpus_inaugural,
+                remove_punct = TRUE) %>% 
+  tokens_tolower() %>% 
+  dfm() %>% 
+  dfm_remove(stopwords("english")) %>% #remove stopwords
+  dfm_wordstem() #stem
+
+dfm_3
+```
+
+### Filtering and weighting
+
+```{r}
+
+dtm <- dfm_3 %>% 
+  dfm_trim(min_termfreq = 2,
+            min_docfreq = 2)
+
+# weight the features using tf-idf 
+#tf-idf-what-now?
+#https://amitlevinson.com/blog/learning-tfidf-with-political-theorists/
+
+dtm <- dfm_tfidf(dtm)
+head(dtm)
+```
+
+## Analysis
+
+Prepare DTM for analysis examples.
+
+```{r}
+dt_inagural <- tokens(data_corpus_inaugural,
+              remove_punct = TRUE) %>% 
+               tokens_tolower() %>% 
+  dfm() %>% 
+  dfm_remove(stopwords("english")) %>% #remove stopwords
+  dfm_wordstem() 
+```
+
+### Counting and Dictionary
+
+```{r}
+myDict <- dictionary(list(terror = c("terror*"), 
+                          economy = c("job*", "business*", "econom*"))) 
+dict_dtm <- dfm_lookup(dt_inagural, myDict, nomatch = "_unmatched") 
+tail(dict_dtm)
+```
+
+### Statistics
+
+```{r}
+# create DTM that contains Trump and Biden speeches
+corpus_pres  <-  corpus_subset(data_corpus_inaugural, 
+                            President %in% c("Biden", "Trump"))
+
+dtm_pres <- tokens(corpus_pres,
+                   remove_punct = TRUE) %>% 
+  tokens_group(groups = President) %>% 
+  dfm() %>% 
+  dfm_remove(stopwords("english"))  #remove stopwords
+  
+# compare target (in this case Trump) to rest of DTM (in this case only Biden).
+
+library(quanteda.textstats)
+library(quanteda.textplots)
+keyness  <-  textstat_keyness(dtm_pres, target = "Trump") 
+textplot_keyness(keyness)
+```
+
+### Using LIWCalike
+
+what is LIWC?
+https://liwc.wpengine.com/compare-dictionaries/
+
+```{r}
+#devtools::install_github("kbenoit/quanteda.dictionaries") 
+library(quanteda.dictionaries)
+quanteda.sentiment::data_dictionary_AFINN
+
+pred_liwcalike <- liwcalike(corpus_pres, 
+                        dictionary = quanteda.sentiment::data_dictionary_NRC)
+pred_liwcalike
+
+pred_liwcalike_myDict <- liwcalike(corpus_pres, 
+                        dictionary = myDict)
+
+pred_liwcalike_myDict
+```
+
+### Unsupervised Machine Learning
+
+```{r}
+library(topicmodels) 
+
+texts  <-  corpus_reshape(data_corpus_inaugural, to = "paragraphs")
+
+par_dtm <- tokens(texts, remove_punct = TRUE) %>% 
+  dfm() %>% #create document-feature-matrix
+  dfm_remove(stopwords("english")) %>% #remove stopwords
+  #dfm_wordstem() %>%  #stem
+dfm_trim(min_count = 5,
+         min_termfreq = 5) 	# remove rare terms
+
+par_dtm <- convert(par_dtm, to = "topicmodels") # convert to topicmodels format
+
+set.seed(1)
+lda_model <- topicmodels::LDA(par_dtm, method = "Gibbs", k = 5) 
+topicmodels::terms(lda_model, 10)
+```
+
+## Advanced Topics
+
+### Word Positions and Syntax
+
+```{r}
+text <- "an example of preprocessing techniques" 
+tokens(text) %>% 
+  tokens_ngrams(n = 3)
+
+tokens(text) %>% 
+  tokens_ngrams(n = 3, skip = 1)
+```
