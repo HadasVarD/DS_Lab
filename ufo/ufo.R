@@ -70,7 +70,7 @@ cases_per_capita <- by_state2 %>%
   mutate(cases_per_capita = cases/mean_pop)
   
 
-by_state2 <- left_join(by_state2, select(cases_per_capita, region, cases_per_capita), by = "region")
+by_state2 <- left_join(by_state2, select(cases_per_capita, region, cases_per_capita, cases_total = cases), by = "region")
 
 # Actually plotting
 plot <- ggplot(by_state2, aes(x = long, y = lat, fill = cases_per_capita, group = group)) +
@@ -108,4 +108,43 @@ plot
 
 ##### Saving ----
 ggsave(filename = "ufo.png", plot = plot, path = "plots/", height = 1009, width = 1920, dpi = 96, units = "px")
+
+
+
+
+
+
+
+
+
+
+
+plot2 <- ggplot(by_state2, aes(x = long, y = lat, fill = cases_total, group = group)) +
+  geom_polygon(color = "black", show.legend = T) +
+  scale_fill_gradient(low = "#ffae00", high = "#d90000", limits = c(0, 2864832), breaks = c(0, 2850000)) +
+  coord_fixed(1.3, clip = "off") +
+  theme_minimal()
+
+plot2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
