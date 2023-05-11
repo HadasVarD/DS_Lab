@@ -1,0 +1,651 @@
+---
+title: "Covid_BIG5"
+author: "Tomer & Hadas"
+format: html
+self-contained: true
+editor: visual
+---
+
+
+## Libraries
+
+
+```{r}
+#| output: false
+#| warning: false
+#install.packages("lm.beta")
+library(tidyverse)
+library(lubridate)
+library(lm.beta)
+```
+
+
+# COVID-19 Data
+
+Loading the COVID datasets, combining them (we won't do any ML in this project), and inspecting the first values:
+
+
+```{r}
+#| echo: true
+test <- read_csv("data/Covid19/test.csv", show_col_types = F)
+test_labels <- read_csv("data/Covid19/submission.csv", show_col_types = F)
+country_codes <- read_csv("data/ISO_Codes/iso-country-codes.csv", show_col_types = F)
+train <- read_csv("data/Covid19/train.csv", show_col_types = F)
+
+test <- inner_join(test, test_labels, by = "ForecastId") %>% # Adding test labels
+  rename(Id = ForecastId)
+
+covid19 <- rbind(train, test) %>%
+  select(Country = "Country/Region", Date, ConfirmedCases) %>%
+  arrange(Date)
+
+country_codes <- country_codes %>%
+  select(Country = `English short name lower case`, country_code = `Alpha-2 code`)
+
+rm(list = c("train", "test", "test_labels"))
+
+head(covid19)
+```
+
+
+## Filtering
+
+Leaving countries that had at least 50 confirmed case, and had at least 14 days of data beyond reaching those 50 cases:
+
+
+```{r}
+covid19 <- covid19 %>%
+  filter(ConfirmedCases >= 50) %>%
+  group_by(Country, Date) %>%
+  summarise(ConfirmedCases = sum(ConfirmedCases),
+            .groups = "drop") %>%
+  group_by(Country) %>%
+  mutate(days_beyond_50 = n()) %>%
+  ungroup() %>%
+  filter(days_beyond_50 >= 14)
+
+length(unique(covid19$Country)) # How many countries are left?
+```
+
+
+## Adding country codes for later
+
+
+```{r}
+covid19 <- covid19 %>%
+  left_join(country_codes, by = c("Country")) %>%
+  mutate(country_code = case_when(Country == "Korea, South" ~ "KR", 
+                                  Country == "US" ~ "US", # Two countries had different names so didn't merge right
+                                  .default = country_code))
+
+
+head(covid19)
+```
+
+
+# BIG-5 Personality test
+
+
+```{r}
+#| warning: false
+big5 <- read.csv("data/BIG5/data-final.csv", head = T, quote = "", sep = "\t")
+
+# transforming cols to numeric
+names_big5 <- names(big5)
+names_big5 <- names_big5[names_big5 != "country"]
+
+big5 <- big5 %>%
+  mutate_at(names_big5, as.numeric) %>%
+  rename(country_code = country) # renaming for later merge
+
+head(big5[,1:10])
+```
+
+
+## Reverse coding
+
+
+```{r}
+positively_keyed <- c('EXT1', 'EXT3', 'EXT5', 'EXT7', 'EXT9', 'EST1', 'EST3', 'EST5', 'EST6', 'EST7', 'EST8', 'EST9', 'EST10', 'AGR2', 'AGR4', 'AGR6', 'AGR8', 'AGR9', 'AGR10', 'CSN1', 'CSN3', 'CSN5', 'CSN7', 'CSN9', 'CSN10', 'OPN1', 'OPN3', 'OPN5', 'OPN7', 'OPN8', 'OPN9', 'OPN10')
+
+negatively_keyed <- c('EXT2', 'EXT4', 'EXT6', 'EXT8', 'EXT10', 'EST2', 'EST4', 'AGR1', 'AGR3', 'AGR5', 'AGR7', 'CSN2', 'CSN4', 'CSN6', 'CSN8',  'OPN2', 'OPN4', 'OPN6')
+
+big5[,negatively_keyed] <- 6 - big5[,negatively_keyed]
+```
+
+
+## Aggregate BIG-5 observations per country
+
+Filtering to get only the countries with at least 1000 observations
+
+
+```{r}
+obs_per_country <- big5 %>%
+  group_by(country_code) %>%
+  summarise(observations = n()) %>%
+  filter(observations >= 1000) %>%
+  ungroup()
+```
+
+
+Filtering the big dataset, and averaging each big5 dimension per country
+
+
+```{r}
+big5 <- filter(big5, country_code %in% obs_per_country$country_code)
+
+ext <- paste0(rep("EXT", 11), c(1:10))
+est <- paste0(rep("EST", 11), c(1:10))
+agr <- paste0(rep("AGR", 11), c(1:10))
+csn <- paste0(rep("CSN", 11), c(1:10))
+opn <- paste0(rep("OPN", 11), c(1:10))
+```
+
+
+Aggregating big5 dimensions per country
+
+
+```{r}
+big5_per_country <- big5 %>%
+  mutate(ext = rowMeans(select(big5, all_of(ext))),
+         est = rowMeans(select(big5, all_of(est))),
+         agr = rowMeans(select(big5, all_of(agr))),
+         csn = rowMeans(select(big5, all_of(csn))),
+         opn = rowMeans(select(big5, all_of(opn)))) %>%
+  group_by(country_code) %>%
+  summarise(ext = mean(ext, na.rm = T),
+            est = mean(est, na.rm = T),
+            agr = mean(agr, na.rm = T),
+            csn = mean(csn, na.rm = T),
+            opn = mean(opn, na.rm = T))
+
+rm(big5)
+```
+
+
+## Plotting top-5 countries by average Extraverion score
+
+
+```{r}
+top5_ext <- big5_per_country %>%
+  arrange(desc(ext)) %>%
+  head(5)
+
+ggplot(top5_ext, aes(x = factor(country_code, levels = c("SE", "NZ", "DK", "NL", "NO")), y = ext)) +
+  geom_col(fill = "royalblue") +
+  theme_classic() +
+  scale_y_continuous(breaks = seq(0, 3, 0.5)) +
+  scale_x_discrete() +
+  coord_flip() +
+  labs(x = "country", y = "")
+```
+
+
+## Merging the big5 data with the covid19 data
+
+
+```{r}
+covid19 <- left_join(covid19, big5_per_country, by = c("country_code"))
+
+head(covid19)
+```
+
+
+### Adding column of the 14th day after the first 50 cases
+
+
+```{r}
+#| warning: false
+covid19_for_plots <- covid19 %>%
+  group_by(Country, country_code) %>%
+  summarise(two_weeks_after_50_case = min(Date) + 14,
+            .groups = "drop") %>%
+  right_join(covid19, by = c("Country", "country_code")) %>%
+  filter(Date == two_weeks_after_50_case) # Leaving only cases at 14 days after the first 50 cases
+```
+
+
+## Cases at 14 days after the first 50 cases, by Extraversion
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ ext, data = covid19_for_plots))
+lm.beta(lm(ConfirmedCases ~ ext, data = covid19_for_plots))
+```
+
+
+p.value = 0.55 cor = 0.131
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_ext <- round(min(covid19_for_plots$ext, na.rm = T), 2)
+max_ext <- round(max(covid19_for_plots$ext, na.rm = T), 2)
+
+ggplot(covid19_for_plots, aes(x = ext, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-3000, 26000), breaks = seq(0, 20000, 5000)) +
+  scale_x_continuous(limits = c(min_ext, max_ext), breaks = seq(2.90, 3.05, 0.05)) +
+  coord_cartesian(xlim = c(min_ext, max_ext), ylim = c(-3000, 25000)) +
+  xlab("EXT") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Extraversion\nr=0.131, p=0.55") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by Emotional Stability
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ est, data = covid19_for_plots))
+lm.beta(lm(ConfirmedCases ~ est, data = covid19_for_plots))
+```
+
+
+p.value = 0.238 cor = -0.255
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_est <- round(min(covid19_for_plots$est, na.rm = T), 2)
+max_est <- round(max(covid19_for_plots$est, na.rm = T), 2)
+
+ggplot(covid19_for_plots, aes(x = est, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-6000, 26000), breaks = seq(0, 20000, 5000)) +
+  scale_x_continuous(limits = c(min_est, max_est), breaks = seq(2.95, 3.25, 0.05)) +
+  coord_cartesian(xlim = c(min_est, max_est), ylim = c(-6000, 25000)) +
+  xlab("EST") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Emotional Stability\nr=-0.255, p=0.24") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by Agreeableness
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ agr, data = covid19_for_plots))
+lm.beta(lm(ConfirmedCases ~ agr, data = covid19_for_plots))
+```
+
+
+p.value = 0.51 cor = 0.144
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_agr <- round(min(covid19_for_plots$agr, na.rm = T), 2)
+max_agr <- round(max(covid19_for_plots$agr, na.rm = T), 2)
+
+ggplot(covid19_for_plots, aes(x = agr, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-3200, 26000), breaks = seq(0, 20000, 5000)) +
+  scale_x_continuous(limits = c(min_agr, max_agr), breaks = seq(3.62, 3.76, 0.02)) +
+  coord_cartesian(xlim = c(min_agr, max_agr), ylim = c(-3200, 25000)) +
+  xlab("AGR") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Agreeableness\nr=0.144, p=0.51") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by CON
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ csn, data = covid19_for_plots))
+lm.beta(lm(ConfirmedCases ~ csn, data = covid19_for_plots))
+```
+
+
+p.value = 0.80 cor = -0.06
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_csn <- round(min(covid19_for_plots$csn, na.rm = T), 2)
+max_csn <- round(max(covid19_for_plots$csn, na.rm = T), 2)
+
+ggplot(covid19_for_plots, aes(x = csn, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-3000, 26000), breaks = seq(0, 20000, 5000)) +
+  scale_x_continuous(limits = c(min_csn, max_csn), breaks = seq(3.20, 3.36, 0.02)) +
+  coord_cartesian(xlim = c(min_csn, max_csn), ylim = c(-3000, 25000)) +
+  xlab("CSN") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Conscientiousness\nr=-0.06, p=0.80") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by Openness
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ opn, data = covid19_for_plots))
+lm.beta(lm(ConfirmedCases ~ opn, data = covid19_for_plots))
+```
+
+
+p.value = 0.56 cor = -0.13
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_opn <- round(min(covid19_for_plots$opn, na.rm = T), 2)
+max_opn <- round(max(covid19_for_plots$opn, na.rm = T), 2)
+
+ggplot(covid19_for_plots, aes(x = opn, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-3000, 26000), breaks = seq(0, 20000, 5000)) +
+  scale_x_continuous(limits = c(min_opn, max_opn), breaks = seq(3.5, 4.0, 0.1)) +
+  coord_cartesian(xlim = c(min_opn, max_opn), ylim = c(-3000, 25000)) +
+  xlab("OPN") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Openness\nr=-0.13, p=0.56") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+# Filtering out China
+
+
+```{r}
+covid19_for_plots_no_china <- covid19_for_plots %>%
+  filter(Country != "China")
+```
+
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ ext, data = covid19_for_plots_no_china))
+lm.beta(lm(ConfirmedCases ~ ext, data = covid19_for_plots_no_china))
+```
+
+
+p.value = 0.92 cor = 0.02
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_ext <- round(min(covid19_for_plots_no_china$ext, na.rm = T), 2)
+max_ext <- round(max(covid19_for_plots_no_china$ext, na.rm = T), 2)
+
+ggplot(covid19_for_plots_no_china, aes(x = ext, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-500, 6500), breaks = seq(0, 6500, 1000)) +
+  scale_x_continuous(limits = c(min_ext, max_ext), breaks = seq(2.90, 3.05, 0.05)) +
+  coord_cartesian(xlim = c(min_ext, max_ext), ylim = c(-500, 6500)) +
+  xlab("EXT") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Extraversion\nr=0.02, p=0.92") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by Emotional Stability
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ est, data = covid19_for_plots_no_china))
+lm.beta(lm(ConfirmedCases ~ est, data = covid19_for_plots_no_china))
+```
+
+
+p.value = 0.63 cor = -0.11
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_est <- round(min(covid19_for_plots_no_china$est, na.rm = T), 2)
+max_est <- round(max(covid19_for_plots_no_china$est, na.rm = T), 2)
+
+ggplot(covid19_for_plots_no_china, aes(x = est, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-1000, 6500), breaks = seq(0, 6500, 1000)) +
+  scale_x_continuous(limits = c(min_est, max_est), breaks = seq(2.95, 3.25, 0.05)) +
+  coord_cartesian(xlim = c(min_est, max_est), ylim = c(-500, 6500)) +
+  xlab("EST") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Emotional Stability\nr=-0.11, p=0.63") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by Agreeableness
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ agr, data = covid19_for_plots_no_china))
+lm.beta(lm(ConfirmedCases ~ agr, data = covid19_for_plots_no_china))
+```
+
+
+p.value = 0.56 cor = 0.13
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_agr <- round(min(covid19_for_plots_no_china$agr, na.rm = T), 2)
+max_agr <- round(max(covid19_for_plots_no_china$agr, na.rm = T), 2)
+
+ggplot(covid19_for_plots_no_china, aes(x = agr, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-1000, 6500), breaks = seq(0, 6500, 1000)) +
+  scale_x_continuous(limits = c(3.64, max_agr), breaks = seq(3.64, 3.76, 0.02)) +
+  coord_cartesian(xlim = c(3.64, max_agr), ylim = c(-500, 6500)) +
+  xlab("AGR") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Agreeableness\nr=0.13, p=0.56") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by CON
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ csn, data = covid19_for_plots_no_china))
+lm.beta(lm(ConfirmedCases ~ csn, data = covid19_for_plots_no_china))
+```
+
+
+p.value = 0.05 cor = -0.42
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_csn <- round(min(covid19_for_plots_no_china$csn, na.rm = T), 2)
+max_csn <- round(max(covid19_for_plots_no_china$csn, na.rm = T), 2)
+
+ggplot(covid19_for_plots_no_china, aes(x = csn, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-1000, 6500), breaks = seq(0, 6500, 1000)) +
+  scale_x_continuous(limits = c(min_csn, max_csn), breaks = seq(3.20, 3.36, 0.02)) +
+  coord_cartesian(xlim = c(min_csn, max_csn), ylim = c(-500, 6500)) +
+  xlab("CSN") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Conscientiousness\nr=-0.42, p=0.05") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Cases at 14 days after the first 50 cases, by Openness
+
+### Linear model
+
+
+```{r}
+summary(lm(ConfirmedCases ~ opn, data = covid19_for_plots_no_china))
+lm.beta(lm(ConfirmedCases ~ opn, data = covid19_for_plots_no_china))
+```
+
+
+p.value = 0.008 cor = 0.55
+
+### Plot
+
+
+```{r}
+#| warning: false
+min_opn <- round(min(covid19_for_plots_no_china$opn, na.rm = T), 2)
+max_opn <- round(max(covid19_for_plots_no_china$opn, na.rm = T), 2)
+
+ggplot(covid19_for_plots_no_china, aes(x = opn, y = ConfirmedCases)) +
+  geom_point(color = "#0000AA", size = 2) +
+  geom_smooth(method = "lm", color = "#0000AA", fill = "#7f8de1") +
+  scale_y_continuous(limits = c(-4000, 6500), breaks = seq(-4000, 6000, 2000)) +
+  scale_x_continuous(limits = c(min_opn, max_opn), breaks = seq(3.5, 4.0, 0.1)) +
+  coord_cartesian(xlim = c(min_opn, max_opn), ylim = c(-4000, 6500)) +
+  xlab("OPN") +
+  ggtitle("Confirmed cases at 14 days after first 50 cases\nby average score on Big 5 factor Openness\nr=0.55, p=0.008") +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+## Openness seems to moderate confirmed Covid cases 14 days after the first 50
+
+
+```{r}
+covid19_opn <- covid19_for_plots %>%
+  select(Country, Openness = opn, ConfirmedCases) %>%
+  arrange(desc(Openness))
+
+head(covid19_opn, n = 14)
+```
+
+
+## Animated map
+
+### Loading fonts and gganimate library
+
+
+```{r}
+#| warning: false
+library(showtext)
+library(gganimate)
+```
+
+
+### Plotting
+
+
+```{r}
+# data
+covid19_animated <- covid19 %>%
+  filter(Country != "China") %>%
+  drop_na(opn) %>% # omitting countries with no BIG-5 data
+  select(Country, Date, ConfirmedCases, opn) %>%
+  group_by(Date) %>%
+  arrange(Date, -ConfirmedCases) %>%
+  mutate(rank = 1:n())
+
+
+# Colors
+legend_high_col <- "#8ff9ff"
+legend_low_col <- "#1b2c2d"
+date_text_col <- "gray18"
+country_text_col <- "gray13"
+p_background_col <- "#f0f8ff"
+
+# plot
+plot1 <- covid19_animated %>%
+  ggplot() +
+  aes(xmin = 0, xmax = ConfirmedCases) +
+  aes(ymin = rank - .45, ymax = rank + .45, y = rank) +
+  geom_rect(alpha = .7) +
+  aes(fill = opn) +  
+  scale_x_continuous(limits = c(-15000, max(covid19_animated$ConfirmedCases))) +  
+  geom_text(col = country_text_col, hjust = "right", aes(label = Country), x = -100, family = "serif", size = 5) +
+  scale_y_reverse() +
+  guides(fill = guide_colorbar(title = "Mean national\nOpenness", title.hjust = 0.5, ticks = F)) +
+  scale_fill_continuous(low = legend_low_col, high = legend_high_col, labels = round(seq(min_opn, max_opn, 0.2), 2),
+                        breaks = seq(min_opn+0.1, max_opn, 0.18), limits = c(min_opn, max_opn)) +
+  geom_text(x = 46500, y = -32, family = "mono", aes(label = Date), size = 24, col = date_text_col) +
+  theme_classic() +
+  labs(title = "Covid-19 spreads faster in countries with high mean Opennes",
+       subtitle = "Comulative cases in 14 days in different countries, with colors representing national mean trait Opennes",
+       caption = "Tomer Zipori & Hadas Wardi | Big-5 and Covid-19 data is from Kaggle") +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(family = "serif", size = 13),
+        axis.ticks.y = element_blank(),
+        legend.title = element_text(family = "serif", size = 18),
+        legend.text = element_text(family = "mono", size = 13),
+        plot.title = element_text(family = "serif", size = 30, hjust = 0.7),
+        plot.subtitle = element_text(family = "serif", size = 19, hjust = 0.7),
+        plot.caption = element_text(family = "serif", size = 10),
+        plot.caption.position = "plot",
+        plot.background = element_rect(fill = p_background_col),
+        panel.background = element_rect(fill = p_background_col),
+        legend.background = element_rect(fill = p_background_col, color = "black"),
+        legend.key.height = unit(2.5, "cm"),
+        plot.margin = unit(c(5,5,5,5), "mm")) +
+  aes(group = Country) +
+  gganimate::transition_time(Date)
+
+plot1 <- animate(plot1, fps = 5, end_pause = 50, width = 1200, height = 900)
+
+# saving
+#anim_save("plots/covid19_big5.gif", plot1)
+```
+
+
+# Spread of Covid-19 around the world
+
+## Mean national opennes is related to faster growth
+
+
+```{r}
+plot1
+```
+

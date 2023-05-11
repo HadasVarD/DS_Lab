@@ -2,6 +2,7 @@
 title: "Covid_BIG5"
 author: "Tomer & Hadas"
 format: html
+self-contained: true
 editor: visual
 ---
 
