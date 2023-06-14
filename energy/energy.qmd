@@ -1,0 +1,53 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(tidytuesdayR)
+library(maps)
+```
+
+```{r}
+owid_energy <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-06-06/owid-energy.csv', show_col_types = F)
+
+world <- map_data("world") |>
+  rename(country = region)
+
+iso_codes <- read_csv("iso_codes.csv", show_col_types = F) |>
+  select(country = name, iso_code = 'alpha-3')
+
+world <- full_join(iso_codes, world, by = "country")
+```
+
+```{r}
+iso_codes$country[!(iso_codes$iso_code %in% world$iso_code)]
+```
+
+
+
+```{r}
+world_map <- owid_energy |>
+  select(country, iso_code, year, energy_consuption = energy_per_capita, energy_production = per_capita_electricity) |>
+  drop_na() |>
+  mutate(diff = energy_production - energy_consuption) |>
+  inner_join(world, by = "country")
+```
+
+```{r}
+world_map2021 <- world_map |>
+  filter(year == 2021)
+```
+
+```{r}
+plot <- ggplot(world_map2021, aes(x = long, y = lat, fill = diff, group = group)) +
+  geom_polygon(color = "black", show.legend = T)
+```
+
+
+
+
+
+

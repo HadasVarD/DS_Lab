@@ -1,0 +1,110 @@
+---
+title: "Mental Health"
+author: "Me"
+date: last-modified
+title-block-banner: "#525266"
+execute: 
+  warning: false
+  message: false
+  cache: true
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+editor: visual
+---
+
+# Setup
+
+```{r}
+library(tidyverse)
+library(text)
+library(caret)
+```
+
+## `text` package initialization
+
+```{r}
+text::textrpp_initialize(save_profile = T)
+```
+
+# Loading text
+
+```{r}
+data <- read_csv("mental_health.csv", show_col_types = F)
+```
+
+# Text embedding
+
+## Sampling
+
+```{r}
+set.seed(14)
+
+class1 <- dplyr::slice_sample(data[data$label == 0,], n = 500, replace = F)
+
+class2 <- dplyr::slice_sample(data[data$label == 1,], n = 500, replace = F)
+
+data_sampled <- rbind(class1, class2)
+```
+
+```{r}
+#| output: false
+#| eval: false
+text_emb <- textEmbed(data_sampled, model = "sentence-transformers/all-MiniLM-L6-v2", layers = 6)
+```
+
+```{r}
+#| echo: false
+text_emb <- read_rds("text_embedded.rds")
+```
+
+# Machine learning!
+
+```{r}
+text_emb$texts$text$label <- factor(rep(c(0, 1), each = 500))
+```
+
+## Train/test split
+
+```{r}
+train_index <- caret::createDataPartition(text_emb$texts$text$label, p = 0.75, list = F)
+
+train_data <- text_emb$texts$text[train_index,]
+test_data <- text_emb$texts$text[-train_index,]
+```
+
+## Decision tree boosting
+
+### Training control
+
+```{r}
+tr <- trainControl(method = "adaptive_cv",
+                   number = 10, repeats = 10,
+                   adaptive = list(min = 5, alpha = 0.05, 
+                                   method = "BT", complete = TRUE),
+                   search = "random")
+```
+
+### Training
+
+```{r}
+#| eval: false
+boost_model <- train(label ~ ., 
+                   data = train_data,
+                   method = "gbm",
+                   trControl = tr, # No explicit tuning grid is needed
+                   verbose = F)
+```
+
+```{r}
+#| echo: false
+boost_model <- readRDS("boost_model.rds")
+```
+
+### Train/CV error
+
+```{r}
+boost_model$results[boost_model$results$RMSE == min(boost_model$results$RMSE, na.rm = T),]
+```

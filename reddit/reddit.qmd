@@ -1,0 +1,22 @@
+---
+title: "Reddit"
+author: "Tomer & Hadas"
+format: html
+editor: visual
+---
+
+# Setup
+```{r}
+library(quanteda)
+library(quanteda.textplots)
+library(text)
+library(RedditExtractoR)
+```
+
+# Reddit scraping
+```{r}
+RedditExtractoR::find_thread_urls(subreddit = "The Congress")
+```
+
+
+
