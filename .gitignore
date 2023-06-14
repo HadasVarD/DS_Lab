@@ -10,3 +10,4 @@ covid_big5/Covid_BIG5_files/
 covid_big5/data/
 *cache/
 *files/
+text_embedded.rds
