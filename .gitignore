@@ -2,3 +2,12 @@
 .Rhistory
 .RData
 .Ruserdata
+.RDataTmp*
+*.csv
+*.txt
+*.html
+covid_big5/Covid_BIG5_files/
+covid_big5/data/
+*cache/
+*files/
+*.rds

@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tomer &amp; Hadas">
+
+<title>Covid_BIG5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="Covid_BIG5_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Covid_BIG5_files/libs/quarto-html/quarto.js"></script>
+<script src="Covid_BIG5_files/libs/quarto-html/popper.min.js"></script>
+<script src="Covid_BIG5_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Covid_BIG5_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Covid_BIG5_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Covid_BIG5_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Covid_BIG5_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Covid_BIG5_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Covid_BIG5_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Covid_BIG5</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tomer &amp; Hadas </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="libraries" class="level2">
+<h2 class="anchored" data-anchor-id="libraries">Libraries</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("lm.beta")</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lm.beta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="covid-19-data" class="level1">
+<h1>COVID-19 Data</h1>
+<p>Loading the COVID datasets, combining them (we won’t do any ML in this project), and inspecting the first values:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Covid19/test.csv"</span>, <span class="at">show_col_types =</span> F)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>test_labels <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Covid19/submission.csv"</span>, <span class="at">show_col_types =</span> F)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>country_codes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/ISO_Codes/iso-country-codes.csv"</span>, <span class="at">show_col_types =</span> F)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/Covid19/train.csv"</span>, <span class="at">show_col_types =</span> F)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(test, test_labels, <span class="at">by =</span> <span class="st">"ForecastId"</span>) <span class="sc">%&gt;%</span> <span class="co"># Adding test labels</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Id =</span> ForecastId)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>covid19 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(train, test) <span class="sc">%&gt;%</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">Country =</span> <span class="st">"Country/Region"</span>, Date, ConfirmedCases) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Date)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>country_codes <span class="ot">&lt;-</span> country_codes <span class="sc">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">Country =</span> <span class="st">`</span><span class="at">English short name lower case</span><span class="st">`</span>, <span class="at">country_code =</span> <span class="st">`</span><span class="at">Alpha-2 code</span><span class="st">`</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">c</span>(<span class="st">"train"</span>, <span class="st">"test"</span>, <span class="st">"test_labels"</span>))</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(covid19)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  Country             Date       ConfirmedCases
+  &lt;chr&gt;               &lt;date&gt;              &lt;dbl&gt;
+1 Afghanistan         2020-01-22              0
+2 Albania             2020-01-22              0
+3 Algeria             2020-01-22              0
+4 Andorra             2020-01-22              0
+5 Antigua and Barbuda 2020-01-22              0
+6 Argentina           2020-01-22              0</code></pre>
+</div>
+</div>
+<section id="filtering" class="level2">
+<h2 class="anchored" data-anchor-id="filtering">Filtering</h2>
+<p>Leaving countries that had at least 50 confirmed case, and had at least 14 days of data beyond reaching those 50 cases:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>covid19 <span class="ot">&lt;-</span> covid19 <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ConfirmedCases <span class="sc">&gt;=</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country, Date) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ConfirmedCases =</span> <span class="fu">sum</span>(ConfirmedCases),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country) <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">days_beyond_50 =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(days_beyond_50 <span class="sc">&gt;=</span> <span class="dv">14</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(covid19<span class="sc">$</span>Country)) <span class="co"># How many countries are left?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 36</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-country-codes-for-later" class="level2">
+<h2 class="anchored" data-anchor-id="adding-country-codes-for-later">Adding country codes for later</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>covid19 <span class="ot">&lt;-</span> covid19 <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(country_codes, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Country"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country_code =</span> <span class="fu">case_when</span>(Country <span class="sc">==</span> <span class="st">"Korea, South"</span> <span class="sc">~</span> <span class="st">"KR"</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                  Country <span class="sc">==</span> <span class="st">"US"</span> <span class="sc">~</span> <span class="st">"US"</span>, <span class="co"># Two countries had different names so didn't merge right</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">.default =</span> country_code))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(covid19)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  Country   Date       ConfirmedCases days_beyond_50 country_code
+  &lt;chr&gt;     &lt;date&gt;              &lt;dbl&gt;          &lt;int&gt; &lt;chr&gt;       
+1 Australia 2020-03-10             55             15 AU          
+2 Australia 2020-03-11             65             15 AU          
+3 Australia 2020-03-12             65             15 AU          
+4 Australia 2020-03-13             92             15 AU          
+5 Australia 2020-03-14            112             15 AU          
+6 Australia 2020-03-15            252             15 AU          </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="big-5-personality-test" class="level1">
+<h1>BIG-5 Personality test</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>big5 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/BIG5/data-final.csv"</span>, <span class="at">head =</span> T, <span class="at">quote =</span> <span class="st">""</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># transforming cols to numeric</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>names_big5 <span class="ot">&lt;-</span> <span class="fu">names</span>(big5)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>names_big5 <span class="ot">&lt;-</span> names_big5[names_big5 <span class="sc">!=</span> <span class="st">"country"</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>big5 <span class="ot">&lt;-</span> big5 <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(names_big5, as.numeric) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">country_code =</span> country) <span class="co"># renaming for later merge</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(big5[,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  EXT1 EXT2 EXT3 EXT4 EXT5 EXT6 EXT7 EXT8 EXT9 EXT10
+1    4    1    5    2    5    1    5    2    4     1
+2    3    5    3    4    3    3    2    5    1     5
+3    2    3    4    4    3    2    1    3    2     5
+4    2    2    2    3    4    2    2    4    1     4
+5    3    3    3    3    5    3    3    5    3     4
+6    3    3    4    2    4    2    2    3    3     4</code></pre>
+</div>
+</div>
+<section id="reverse-coding" class="level2">
+<h2 class="anchored" data-anchor-id="reverse-coding">Reverse coding</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>positively_keyed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'EXT1'</span>, <span class="st">'EXT3'</span>, <span class="st">'EXT5'</span>, <span class="st">'EXT7'</span>, <span class="st">'EXT9'</span>, <span class="st">'EST1'</span>, <span class="st">'EST3'</span>, <span class="st">'EST5'</span>, <span class="st">'EST6'</span>, <span class="st">'EST7'</span>, <span class="st">'EST8'</span>, <span class="st">'EST9'</span>, <span class="st">'EST10'</span>, <span class="st">'AGR2'</span>, <span class="st">'AGR4'</span>, <span class="st">'AGR6'</span>, <span class="st">'AGR8'</span>, <span class="st">'AGR9'</span>, <span class="st">'AGR10'</span>, <span class="st">'CSN1'</span>, <span class="st">'CSN3'</span>, <span class="st">'CSN5'</span>, <span class="st">'CSN7'</span>, <span class="st">'CSN9'</span>, <span class="st">'CSN10'</span>, <span class="st">'OPN1'</span>, <span class="st">'OPN3'</span>, <span class="st">'OPN5'</span>, <span class="st">'OPN7'</span>, <span class="st">'OPN8'</span>, <span class="st">'OPN9'</span>, <span class="st">'OPN10'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>negatively_keyed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'EXT2'</span>, <span class="st">'EXT4'</span>, <span class="st">'EXT6'</span>, <span class="st">'EXT8'</span>, <span class="st">'EXT10'</span>, <span class="st">'EST2'</span>, <span class="st">'EST4'</span>, <span class="st">'AGR1'</span>, <span class="st">'AGR3'</span>, <span class="st">'AGR5'</span>, <span class="st">'AGR7'</span>, <span class="st">'CSN2'</span>, <span class="st">'CSN4'</span>, <span class="st">'CSN6'</span>, <span class="st">'CSN8'</span>,  <span class="st">'OPN2'</span>, <span class="st">'OPN4'</span>, <span class="st">'OPN6'</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>big5[,negatively_keyed] <span class="ot">&lt;-</span> <span class="dv">6</span> <span class="sc">-</span> big5[,negatively_keyed]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="aggregate-big-5-observations-per-country" class="level2">
+<h2 class="anchored" data-anchor-id="aggregate-big-5-observations-per-country">Aggregate BIG-5 observations per country</h2>
+<p>Filtering to get only the countries with at least 1000 observations</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>obs_per_country <span class="ot">&lt;-</span> big5 <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_code) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">observations =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(observations <span class="sc">&gt;=</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Filtering the big dataset, and averaging each big5 dimension per country</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>big5 <span class="ot">&lt;-</span> <span class="fu">filter</span>(big5, country_code <span class="sc">%in%</span> obs_per_country<span class="sc">$</span>country_code)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>ext <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">rep</span>(<span class="st">"EXT"</span>, <span class="dv">11</span>), <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">rep</span>(<span class="st">"EST"</span>, <span class="dv">11</span>), <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>agr <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">rep</span>(<span class="st">"AGR"</span>, <span class="dv">11</span>), <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>csn <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">rep</span>(<span class="st">"CSN"</span>, <span class="dv">11</span>), <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>opn <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">rep</span>(<span class="st">"OPN"</span>, <span class="dv">11</span>), <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Aggregating big5 dimensions per country</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>big5_per_country <span class="ot">&lt;-</span> big5 <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ext =</span> <span class="fu">rowMeans</span>(<span class="fu">select</span>(big5, <span class="fu">all_of</span>(ext))),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">est =</span> <span class="fu">rowMeans</span>(<span class="fu">select</span>(big5, <span class="fu">all_of</span>(est))),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">agr =</span> <span class="fu">rowMeans</span>(<span class="fu">select</span>(big5, <span class="fu">all_of</span>(agr))),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">csn =</span> <span class="fu">rowMeans</span>(<span class="fu">select</span>(big5, <span class="fu">all_of</span>(csn))),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">opn =</span> <span class="fu">rowMeans</span>(<span class="fu">select</span>(big5, <span class="fu">all_of</span>(opn)))) <span class="sc">%&gt;%</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country_code) <span class="sc">%&gt;%</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">ext =</span> <span class="fu">mean</span>(ext, <span class="at">na.rm =</span> T),</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">est =</span> <span class="fu">mean</span>(est, <span class="at">na.rm =</span> T),</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">agr =</span> <span class="fu">mean</span>(agr, <span class="at">na.rm =</span> T),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">csn =</span> <span class="fu">mean</span>(csn, <span class="at">na.rm =</span> T),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">opn =</span> <span class="fu">mean</span>(opn, <span class="at">na.rm =</span> T))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(big5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting-top-5-countries-by-average-extraverion-score" class="level2">
+<h2 class="anchored" data-anchor-id="plotting-top-5-countries-by-average-extraverion-score">Plotting top-5 countries by average Extraverion score</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>top5_ext <span class="ot">&lt;-</span> big5_per_country <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(ext)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">5</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(top5_ext, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(country_code, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"SE"</span>, <span class="st">"NZ"</span>, <span class="st">"DK"</span>, <span class="st">"NL"</span>, <span class="st">"NO"</span>)), <span class="at">y =</span> ext)) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"royalblue"</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>() <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"country"</span>, <span class="at">y =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="merging-the-big5-data-with-the-covid19-data" class="level2">
+<h2 class="anchored" data-anchor-id="merging-the-big5-data-with-the-covid19-data">Merging the big5 data with the covid19 data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>covid19 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(covid19, big5_per_country, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"country_code"</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(covid19)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+  Country   Date       ConfirmedCases days_beyond_50 country_code   ext   est
+  &lt;chr&gt;     &lt;date&gt;              &lt;dbl&gt;          &lt;int&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt;
+1 Australia 2020-03-10             55             15 AU            3.00  3.03
+2 Australia 2020-03-11             65             15 AU            3.00  3.03
+3 Australia 2020-03-12             65             15 AU            3.00  3.03
+4 Australia 2020-03-13             92             15 AU            3.00  3.03
+5 Australia 2020-03-14            112             15 AU            3.00  3.03
+6 Australia 2020-03-15            252             15 AU            3.00  3.03
+# ℹ 3 more variables: agr &lt;dbl&gt;, csn &lt;dbl&gt;, opn &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<section id="adding-column-of-the-14th-day-after-the-first-50-cases" class="level3">
+<h3 class="anchored" data-anchor-id="adding-column-of-the-14th-day-after-the-first-50-cases">Adding column of the 14th day after the first 50 cases</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>covid19_for_plots <span class="ot">&lt;-</span> covid19 <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country, country_code) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">two_weeks_after_50_case =</span> <span class="fu">min</span>(Date) <span class="sc">+</span> <span class="dv">14</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(covid19, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Country"</span>, <span class="st">"country_code"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Date <span class="sc">==</span> two_weeks_after_50_case) <span class="co"># Leaving only cases at 14 days after the first 50 cases</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-extraversion" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-extraversion">Cases at 14 days after the first 50 cases, by Extraversion</h2>
+<section id="linear-model" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> ext, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ ext, data = covid19_for_plots)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -5499  -4402  -3639   -553  47956 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)   -26189      93225  -0.281    0.781
+ext            10536      31305   0.337    0.740
+
+Residual standard error: 11470 on 23 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.0049,    Adjusted R-squared:  -0.03836 
+F-statistic: 0.1133 on 1 and 23 DF,  p-value: 0.7395</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> ext, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ ext, data = covid19_for_plots)
+
+Standardized Coefficients::
+(Intercept)         ext 
+         NA  0.07000285 </code></pre>
+</div>
+</div>
+<p>p.value = 0.55 cor = 0.131</p>
+</section>
+<section id="plot" class="level3">
+<h3 class="anchored" data-anchor-id="plot">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>min_ext <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots<span class="sc">$</span>ext, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>max_ext <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots<span class="sc">$</span>ext, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots, <span class="fu">aes</span>(<span class="at">x =</span> ext, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3000</span>, <span class="dv">26000</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20000</span>, <span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_ext, max_ext), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">2.90</span>, <span class="fl">3.05</span>, <span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_ext, max_ext), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3000</span>, <span class="dv">25000</span>)) <span class="sc">+</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"EXT"</span>) <span class="sc">+</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Extraversion</span><span class="sc">\n</span><span class="st">r=0.131, p=0.55"</span>) <span class="sc">+</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-emotional-stability" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-emotional-stability">Cases at 14 days after the first 50 cases, by Emotional Stability</h2>
+<section id="linear-model-1" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-1">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> est, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ est, data = covid19_for_plots)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -7164  -4644  -3666   -246  47503 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)    62871      70458   0.892    0.381
+est           -18862      23023  -0.819    0.421
+
+Residual standard error: 11340 on 23 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.02836,   Adjusted R-squared:  -0.01389 
+F-statistic: 0.6712 on 1 and 23 DF,  p-value: 0.421</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> est, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ est, data = covid19_for_plots)
+
+Standardized Coefficients::
+(Intercept)         est 
+         NA  -0.1683901 </code></pre>
+</div>
+</div>
+<p>p.value = 0.238 cor = -0.255</p>
+</section>
+<section id="plot-1" class="level3">
+<h3 class="anchored" data-anchor-id="plot-1">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>min_est <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots<span class="sc">$</span>est, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>max_est <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots<span class="sc">$</span>est, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots, <span class="fu">aes</span>(<span class="at">x =</span> est, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">6000</span>, <span class="dv">26000</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20000</span>, <span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_est, max_est), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">2.95</span>, <span class="fl">3.25</span>, <span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_est, max_est), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">6000</span>, <span class="dv">25000</span>)) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"EST"</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Emotional Stability</span><span class="sc">\n</span><span class="st">r=-0.255, p=0.24"</span>) <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-agreeableness" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-agreeableness">Cases at 14 days after the first 50 cases, by Agreeableness</h2>
+<section id="linear-model-2" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-2">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> agr, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ agr, data = covid19_for_plots)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -8910  -5570  -1753    791  40734 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  -214798     118092  -1.819   0.0820 .
+agr            59509      31942   1.863   0.0753 .
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10720 on 23 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.1311,    Adjusted R-squared:  0.09334 
+F-statistic: 3.471 on 1 and 23 DF,  p-value: 0.07528</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> agr, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ agr, data = covid19_for_plots)
+
+Standardized Coefficients::
+(Intercept)         agr 
+         NA   0.3621064 </code></pre>
+</div>
+</div>
+<p>p.value = 0.51 cor = 0.144</p>
+</section>
+<section id="plot-2" class="level3">
+<h3 class="anchored" data-anchor-id="plot-2">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>min_agr <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots<span class="sc">$</span>agr, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>max_agr <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots<span class="sc">$</span>agr, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots, <span class="fu">aes</span>(<span class="at">x =</span> agr, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3200</span>, <span class="dv">26000</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20000</span>, <span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_agr, max_agr), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">3.62</span>, <span class="fl">3.76</span>, <span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_agr, max_agr), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3200</span>, <span class="dv">25000</span>)) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"AGR"</span>) <span class="sc">+</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Agreeableness</span><span class="sc">\n</span><span class="st">r=0.144, p=0.51"</span>) <span class="sc">+</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-con" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-con">Cases at 14 days after the first 50 cases, by CON</h2>
+<section id="linear-model-3" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-3">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> csn, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ csn, data = covid19_for_plots)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-11384  -6023  -2824   2037  40846 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)  -194983     120874  -1.613    0.120
+csn            60899      36770   1.656    0.111
+
+Residual standard error: 10870 on 23 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.1066,    Adjusted R-squared:  0.06771 
+F-statistic: 2.743 on 1 and 23 DF,  p-value: 0.1113</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> csn, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ csn, data = covid19_for_plots)
+
+Standardized Coefficients::
+(Intercept)         csn 
+         NA    0.326425 </code></pre>
+</div>
+</div>
+<p>p.value = 0.80 cor = -0.06</p>
+</section>
+<section id="plot-3" class="level3">
+<h3 class="anchored" data-anchor-id="plot-3">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>min_csn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots<span class="sc">$</span>csn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>max_csn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots<span class="sc">$</span>csn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots, <span class="fu">aes</span>(<span class="at">x =</span> csn, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3000</span>, <span class="dv">26000</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20000</span>, <span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_csn, max_csn), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">3.20</span>, <span class="fl">3.36</span>, <span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_csn, max_csn), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3000</span>, <span class="dv">25000</span>)) <span class="sc">+</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"CSN"</span>) <span class="sc">+</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Conscientiousness</span><span class="sc">\n</span><span class="st">r=-0.06, p=0.80"</span>) <span class="sc">+</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-openness" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-openness">Cases at 14 days after the first 50 cases, by Openness</h2>
+<section id="linear-model-4" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-4">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> opn, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ opn, data = covid19_for_plots)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -5646  -5055  -3282  -1000  48088 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)    15020      52827   0.284    0.779
+opn            -2548      13659  -0.187    0.854
+
+Residual standard error: 11490 on 23 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.00151,   Adjusted R-squared:  -0.0419 
+F-statistic: 0.03479 on 1 and 23 DF,  p-value: 0.8537</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> opn, <span class="at">data =</span> covid19_for_plots))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ opn, data = covid19_for_plots)
+
+Standardized Coefficients::
+(Intercept)         opn 
+         NA -0.03886204 </code></pre>
+</div>
+</div>
+<p>p.value = 0.56 cor = -0.13</p>
+</section>
+<section id="plot-4" class="level3">
+<h3 class="anchored" data-anchor-id="plot-4">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>min_opn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots<span class="sc">$</span>opn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>max_opn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots<span class="sc">$</span>opn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots, <span class="fu">aes</span>(<span class="at">x =</span> opn, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3000</span>, <span class="dv">26000</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">20000</span>, <span class="dv">5000</span>)) <span class="sc">+</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_opn, max_opn), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">3.5</span>, <span class="fl">4.0</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_opn, max_opn), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3000</span>, <span class="dv">25000</span>)) <span class="sc">+</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"OPN"</span>) <span class="sc">+</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Openness</span><span class="sc">\n</span><span class="st">r=-0.13, p=0.56"</span>) <span class="sc">+</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="filtering-out-china" class="level1">
+<h1>Filtering out China</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>covid19_for_plots_no_china <span class="ot">&lt;-</span> covid19_for_plots <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Country <span class="sc">!=</span> <span class="st">"China"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="linear-model-5" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-5">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> ext, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ ext, data = covid19_for_plots_no_china)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -4216  -3523  -2820  -1432  48874 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)    -3848      88950  -0.043    0.966
+ext             2742      29889   0.092    0.928
+
+Residual standard error: 10850 on 22 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.0003825, Adjusted R-squared:  -0.04505 
+F-statistic: 0.008417 on 1 and 22 DF,  p-value: 0.9277</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> ext, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ ext, data = covid19_for_plots_no_china)
+
+Standardized Coefficients::
+(Intercept)         ext 
+         NA  0.01955676 </code></pre>
+</div>
+</div>
+<p>p.value = 0.92 cor = 0.02</p>
+</section>
+<section id="plot-5" class="level3">
+<h3 class="anchored" data-anchor-id="plot-5">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>min_ext <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots_no_china<span class="sc">$</span>ext, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>max_ext <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots_no_china<span class="sc">$</span>ext, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots_no_china, <span class="fu">aes</span>(<span class="at">x =</span> ext, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">6500</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6500</span>, <span class="dv">1000</span>)) <span class="sc">+</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_ext, max_ext), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">2.90</span>, <span class="fl">3.05</span>, <span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_ext, max_ext), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">6500</span>)) <span class="sc">+</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"EXT"</span>) <span class="sc">+</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Extraversion</span><span class="sc">\n</span><span class="st">r=0.02, p=0.92"</span>) <span class="sc">+</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-emotional-stability-1" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-emotional-stability-1">Cases at 14 days after the first 50 cases, by Emotional Stability</h2>
+<section id="linear-model-6" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-6">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> est, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ est, data = covid19_for_plots_no_china)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -5145  -3567  -2657  -1141  48590 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)    33274      69152   0.481    0.635
+est            -9455      22562  -0.419    0.679
+
+Residual standard error: 10810 on 22 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.007919,  Adjusted R-squared:  -0.03718 
+F-statistic: 0.1756 on 1 and 22 DF,  p-value: 0.6792</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> est, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ est, data = covid19_for_plots_no_china)
+
+Standardized Coefficients::
+(Intercept)         est 
+         NA -0.08898708 </code></pre>
+</div>
+</div>
+<p>p.value = 0.63 cor = -0.11</p>
+</section>
+<section id="plot-6" class="level3">
+<h3 class="anchored" data-anchor-id="plot-6">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>min_est <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots_no_china<span class="sc">$</span>est, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>max_est <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots_no_china<span class="sc">$</span>est, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots_no_china, <span class="fu">aes</span>(<span class="at">x =</span> est, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1000</span>, <span class="dv">6500</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6500</span>, <span class="dv">1000</span>)) <span class="sc">+</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_est, max_est), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">2.95</span>, <span class="fl">3.25</span>, <span class="fl">0.05</span>)) <span class="sc">+</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_est, max_est), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">6500</span>)) <span class="sc">+</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"EST"</span>) <span class="sc">+</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Emotional Stability</span><span class="sc">\n</span><span class="st">r=-0.11, p=0.63"</span>) <span class="sc">+</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-agreeableness-1" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-agreeableness-1">Cases at 14 days after the first 50 cases, by Agreeableness</h2>
+<section id="linear-model-7" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-7">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> agr, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ agr, data = covid19_for_plots_no_china)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -7765  -4895  -2008   1137  42166 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  -196581     112097  -1.754   0.0934 .
+agr            54364      30330   1.792   0.0868 .
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10140 on 22 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.1274,    Adjusted R-squared:  0.08776 
+F-statistic: 3.213 on 1 and 22 DF,  p-value: 0.08683</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> agr, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ agr, data = covid19_for_plots_no_china)
+
+Standardized Coefficients::
+(Intercept)         agr 
+         NA   0.3569671 </code></pre>
+</div>
+</div>
+<p>p.value = 0.56 cor = 0.13</p>
+</section>
+<section id="plot-7" class="level3">
+<h3 class="anchored" data-anchor-id="plot-7">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>min_agr <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots_no_china<span class="sc">$</span>agr, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>max_agr <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots_no_china<span class="sc">$</span>agr, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots_no_china, <span class="fu">aes</span>(<span class="at">x =</span> agr, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1000</span>, <span class="dv">6500</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6500</span>, <span class="dv">1000</span>)) <span class="sc">+</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">3.64</span>, max_agr), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">3.64</span>, <span class="fl">3.76</span>, <span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="fl">3.64</span>, max_agr), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">6500</span>)) <span class="sc">+</span></span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"AGR"</span>) <span class="sc">+</span></span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Agreeableness</span><span class="sc">\n</span><span class="st">r=0.13, p=0.56"</span>) <span class="sc">+</span></span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-con-1" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-con-1">Cases at 14 days after the first 50 cases, by CON</h2>
+<section id="linear-model-8" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-8">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> csn, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ csn, data = covid19_for_plots_no_china)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -9991  -5067  -2343   2349  42304 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)  -177767     114671  -1.550    0.135
+csn            55414      34894   1.588    0.127
+
+Residual standard error: 10280 on 22 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.1028,    Adjusted R-squared:  0.06207 
+F-statistic: 2.522 on 1 and 22 DF,  p-value: 0.1265</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> csn, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ csn, data = covid19_for_plots_no_china)
+
+Standardized Coefficients::
+(Intercept)         csn 
+         NA   0.3206969 </code></pre>
+</div>
+</div>
+<p>p.value = 0.05 cor = -0.42</p>
+</section>
+<section id="plot-8" class="level3">
+<h3 class="anchored" data-anchor-id="plot-8">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>min_csn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots_no_china<span class="sc">$</span>csn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>max_csn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots_no_china<span class="sc">$</span>csn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots_no_china, <span class="fu">aes</span>(<span class="at">x =</span> csn, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1000</span>, <span class="dv">6500</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">6500</span>, <span class="dv">1000</span>)) <span class="sc">+</span></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_csn, max_csn), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">3.20</span>, <span class="fl">3.36</span>, <span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_csn, max_csn), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">500</span>, <span class="dv">6500</span>)) <span class="sc">+</span></span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"CSN"</span>) <span class="sc">+</span></span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Conscientiousness</span><span class="sc">\n</span><span class="st">r=-0.42, p=0.05"</span>) <span class="sc">+</span></span>
+<span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="cases-at-14-days-after-the-first-50-cases-by-openness-1" class="level2">
+<h2 class="anchored" data-anchor-id="cases-at-14-days-after-the-first-50-cases-by-openness-1">Cases at 14 days after the first 50 cases, by Openness</h2>
+<section id="linear-model-9" class="level3">
+<h3 class="anchored" data-anchor-id="linear-model-9">Linear model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> opn, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ opn, data = covid19_for_plots_no_china)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+ -4636  -3085  -2583  -1704  48835 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)   -21036      52773  -0.399    0.694
+opn             6540      13606   0.481    0.635
+
+Residual standard error: 10800 on 22 degrees of freedom
+  (6 observations deleted due to missingness)
+Multiple R-squared:  0.01039,   Adjusted R-squared:  -0.03459 
+F-statistic: 0.2311 on 1 and 22 DF,  p-value: 0.6355</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm.beta</span>(<span class="fu">lm</span>(ConfirmedCases <span class="sc">~</span> opn, <span class="at">data =</span> covid19_for_plots_no_china))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ConfirmedCases ~ opn, data = covid19_for_plots_no_china)
+
+Standardized Coefficients::
+(Intercept)         opn 
+         NA   0.1019513 </code></pre>
+</div>
+</div>
+<p>p.value = 0.008 cor = 0.55</p>
+</section>
+<section id="plot-9" class="level3">
+<h3 class="anchored" data-anchor-id="plot-9">Plot</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>min_opn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">min</span>(covid19_for_plots_no_china<span class="sc">$</span>opn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>max_opn <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">max</span>(covid19_for_plots_no_china<span class="sc">$</span>opn, <span class="at">na.rm =</span> T), <span class="dv">2</span>)</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_for_plots_no_china, <span class="fu">aes</span>(<span class="at">x =</span> opn, <span class="at">y =</span> ConfirmedCases)) <span class="sc">+</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">color =</span> <span class="st">"#0000AA"</span>, <span class="at">fill =</span> <span class="st">"#7f8de1"</span>) <span class="sc">+</span></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4000</span>, <span class="dv">6500</span>), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4000</span>, <span class="dv">6000</span>, <span class="dv">2000</span>)) <span class="sc">+</span></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(min_opn, max_opn), <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">3.5</span>, <span class="fl">4.0</span>, <span class="fl">0.1</span>)) <span class="sc">+</span></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(min_opn, max_opn), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4000</span>, <span class="dv">6500</span>)) <span class="sc">+</span></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"OPN"</span>) <span class="sc">+</span></span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Confirmed cases at 14 days after first 50 cases</span><span class="sc">\n</span><span class="st">by average score on Big 5 factor Openness</span><span class="sc">\n</span><span class="st">r=0.55, p=0.008"</span>) <span class="sc">+</span></span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="openness-seems-to-moderate-confirmed-covid-cases-14-days-after-the-first-50" class="level2">
+<h2 class="anchored" data-anchor-id="openness-seems-to-moderate-confirmed-covid-cases-14-days-after-the-first-50">Openness seems to moderate confirmed Covid cases 14 days after the first 50</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>covid19_opn <span class="ot">&lt;-</span> covid19_for_plots <span class="sc">%&gt;%</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Country, <span class="at">Openness =</span> opn, ConfirmedCases) <span class="sc">%&gt;%</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(Openness))</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(covid19_opn, <span class="at">n =</span> <span class="dv">14</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 14 × 3
+   Country        Openness ConfirmedCases
+   &lt;chr&gt;             &lt;dbl&gt;          &lt;dbl&gt;
+ 1 Germany            4.09           4585
+ 2 Israel             4.09           1071
+ 3 France             4.07           3661
+ 4 Austria            4.06           2388
+ 5 Switzerland        4.02           2700
+ 6 Italy              3.99           5883
+ 7 Spain              3.97           7798
+ 8 Sweden             3.97           1439
+ 9 Greece             3.96            624
+10 Denmark            3.94           1568
+11 Netherlands        3.94           2460
+12 Norway             3.92           1550
+13 Belgium            3.91           1795
+14 United Kingdom     3.90           1950</code></pre>
+</div>
+</div>
+</section>
+<section id="animated-map" class="level2">
+<h2 class="anchored" data-anchor-id="animated-map">Animated map</h2>
+<section id="loading-fonts-and-gganimate-library" class="level3">
+<h3 class="anchored" data-anchor-id="loading-fonts-and-gganimate-library">Loading fonts and gganimate library</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(showtext)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gganimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting" class="level3">
+<h3 class="anchored" data-anchor-id="plotting">Plotting</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>covid19_animated <span class="ot">&lt;-</span> covid19 <span class="sc">%&gt;%</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Country <span class="sc">!=</span> <span class="st">"China"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(opn) <span class="sc">%&gt;%</span> <span class="co"># omitting countries with no BIG-5 data</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Country, Date, ConfirmedCases, opn) <span class="sc">%&gt;%</span></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Date) <span class="sc">%&gt;%</span></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Date, <span class="sc">-</span>ConfirmedCases) <span class="sc">%&gt;%</span></span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rank =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>())</span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Colors</span></span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a>legend_high_col <span class="ot">&lt;-</span> <span class="st">"#8ff9ff"</span></span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a>legend_low_col <span class="ot">&lt;-</span> <span class="st">"#1b2c2d"</span></span>
+<span id="cb72-14"><a href="#cb72-14" aria-hidden="true" tabindex="-1"></a>date_text_col <span class="ot">&lt;-</span> <span class="st">"gray18"</span></span>
+<span id="cb72-15"><a href="#cb72-15" aria-hidden="true" tabindex="-1"></a>country_text_col <span class="ot">&lt;-</span> <span class="st">"gray13"</span></span>
+<span id="cb72-16"><a href="#cb72-16" aria-hidden="true" tabindex="-1"></a>p_background_col <span class="ot">&lt;-</span> <span class="st">"#f0f8ff"</span></span>
+<span id="cb72-17"><a href="#cb72-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-18"><a href="#cb72-18" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb72-19"><a href="#cb72-19" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> covid19_animated <span class="sc">%&gt;%</span></span>
+<span id="cb72-20"><a href="#cb72-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb72-21"><a href="#cb72-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">xmin =</span> <span class="dv">0</span>, <span class="at">xmax =</span> ConfirmedCases) <span class="sc">+</span></span>
+<span id="cb72-22"><a href="#cb72-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">ymin =</span> rank <span class="sc">-</span> .<span class="dv">45</span>, <span class="at">ymax =</span> rank <span class="sc">+</span> .<span class="dv">45</span>, <span class="at">y =</span> rank) <span class="sc">+</span></span>
+<span id="cb72-23"><a href="#cb72-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_rect</span>(<span class="at">alpha =</span> .<span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb72-24"><a href="#cb72-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">fill =</span> opn) <span class="sc">+</span>  </span>
+<span id="cb72-25"><a href="#cb72-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">15000</span>, <span class="fu">max</span>(covid19_animated<span class="sc">$</span>ConfirmedCases))) <span class="sc">+</span>  </span>
+<span id="cb72-26"><a href="#cb72-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">col =</span> country_text_col, <span class="at">hjust =</span> <span class="st">"right"</span>, <span class="fu">aes</span>(<span class="at">label =</span> Country), <span class="at">x =</span> <span class="sc">-</span><span class="dv">100</span>, <span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb72-27"><a href="#cb72-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb72-28"><a href="#cb72-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_colorbar</span>(<span class="at">title =</span> <span class="st">"Mean national</span><span class="sc">\n</span><span class="st">Openness"</span>, <span class="at">title.hjust =</span> <span class="fl">0.5</span>, <span class="at">ticks =</span> F)) <span class="sc">+</span></span>
+<span id="cb72-29"><a href="#cb72-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">low =</span> legend_low_col, <span class="at">high =</span> legend_high_col, <span class="at">labels =</span> <span class="fu">round</span>(<span class="fu">seq</span>(min_opn, max_opn, <span class="fl">0.2</span>), <span class="dv">2</span>),</span>
+<span id="cb72-30"><a href="#cb72-30" aria-hidden="true" tabindex="-1"></a>                        <span class="at">breaks =</span> <span class="fu">seq</span>(min_opn<span class="fl">+0.1</span>, max_opn, <span class="fl">0.18</span>), <span class="at">limits =</span> <span class="fu">c</span>(min_opn, max_opn)) <span class="sc">+</span></span>
+<span id="cb72-31"><a href="#cb72-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">x =</span> <span class="dv">46500</span>, <span class="at">y =</span> <span class="sc">-</span><span class="dv">32</span>, <span class="at">family =</span> <span class="st">"mono"</span>, <span class="fu">aes</span>(<span class="at">label =</span> Date), <span class="at">size =</span> <span class="dv">24</span>, <span class="at">col =</span> date_text_col) <span class="sc">+</span></span>
+<span id="cb72-32"><a href="#cb72-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb72-33"><a href="#cb72-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Covid-19 spreads faster in countries with high mean Opennes"</span>,</span>
+<span id="cb72-34"><a href="#cb72-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Comulative cases in 14 days in different countries, with colors representing national mean trait Opennes"</span>,</span>
+<span id="cb72-35"><a href="#cb72-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Tomer Zipori &amp; Hadas Wardi | Big-5 and Covid-19 data is from Kaggle"</span>) <span class="sc">+</span></span>
+<span id="cb72-36"><a href="#cb72-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb72-37"><a href="#cb72-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb72-38"><a href="#cb72-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">size =</span> <span class="dv">13</span>),</span>
+<span id="cb72-39"><a href="#cb72-39" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb72-40"><a href="#cb72-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb72-41"><a href="#cb72-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"mono"</span>, <span class="at">size =</span> <span class="dv">13</span>),</span>
+<span id="cb72-42"><a href="#cb72-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">size =</span> <span class="dv">30</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>),</span>
+<span id="cb72-43"><a href="#cb72-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">size =</span> <span class="dv">19</span>, <span class="at">hjust =</span> <span class="fl">0.7</span>),</span>
+<span id="cb72-44"><a href="#cb72-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"serif"</span>, <span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb72-45"><a href="#cb72-45" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb72-46"><a href="#cb72-46" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> p_background_col),</span>
+<span id="cb72-47"><a href="#cb72-47" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> p_background_col),</span>
+<span id="cb72-48"><a href="#cb72-48" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> p_background_col, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb72-49"><a href="#cb72-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.height =</span> <span class="fu">unit</span>(<span class="fl">2.5</span>, <span class="st">"cm"</span>),</span>
+<span id="cb72-50"><a href="#cb72-50" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>), <span class="st">"mm"</span>)) <span class="sc">+</span></span>
+<span id="cb72-51"><a href="#cb72-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">group =</span> Country) <span class="sc">+</span></span>
+<span id="cb72-52"><a href="#cb72-52" aria-hidden="true" tabindex="-1"></a>  gganimate<span class="sc">::</span><span class="fu">transition_time</span>(Date)</span>
+<span id="cb72-53"><a href="#cb72-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-54"><a href="#cb72-54" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">animate</span>(plot1, <span class="at">fps =</span> <span class="dv">5</span>, <span class="at">end_pause =</span> <span class="dv">50</span>, <span class="at">width =</span> <span class="dv">1200</span>, <span class="at">height =</span> <span class="dv">900</span>)</span>
+<span id="cb72-55"><a href="#cb72-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-56"><a href="#cb72-56" aria-hidden="true" tabindex="-1"></a><span class="co"># saving</span></span>
+<span id="cb72-57"><a href="#cb72-57" aria-hidden="true" tabindex="-1"></a><span class="co">#anim_save("plots/covid19_big5.gif", plot1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="spread-of-covid-19-around-the-world" class="level1">
+<h1>Spread of Covid-19 around the world</h1>
+<section id="mean-national-opennes-is-related-to-faster-growth" class="level2">
+<h2 class="anchored" data-anchor-id="mean-national-opennes-is-related-to-faster-growth">Mean national opennes is related to faster growth</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>plot1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Covid_BIG5_files/figure-html/unnamed-chunk-37-1.gif" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

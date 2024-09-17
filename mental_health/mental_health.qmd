@@ -1,0 +1,320 @@
+---
+title: "Mental Health"
+author: Tomer & Hadas
+date: last-modified
+title-block-banner: "#525266"
+execute: 
+  warning: false
+  message: false
+  cache: true
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+editor: visual
+---
+
+# Setup
+
+```{r}
+#| output: false
+library(tidyverse)
+library(text)
+library(quanteda)
+library(quanteda.textmodels)
+library(quanteda.textstats)
+library(textplot)
+library(spacyr)
+library(wordcloud)
+library(textdata)
+library(tidytext)
+```
+
+## `text` package initialization
+
+```{r}
+#| output: false
+#| eval: false
+text::textrpp_initialize()
+```
+
+# Loading data
+
+```{r}
+data <- read_csv("mental_health.csv", show_col_types = F)
+
+head(data)
+```
+
+# Text embedding
+
+## Sampling data
+
+Sampling 500 observations from each class (1, 0).
+
+```{r}
+set.seed(14)
+
+class1 <- dplyr::slice_sample(data[data$label == 0,], n = 500, replace = F) |>
+  mutate(id = factor(c(1:500)))
+
+class2 <- dplyr::slice_sample(data[data$label == 1,], n = 500, replace = F)|>
+  mutate(id = factor(c(501:1000)))
+
+data_sampled <- rbind(class1, class2)
+```
+
+## sentiment analysis
+
+This analysis focuses on a dictionary-based analysis of sentiment and word frequency in two datasets based on the mental health labeling. we used NRC Emotion Lexicon, this dictionary give us a list of English words and their associations with sentiments (negative and positive). we combine each word to her emotional association and compared between the emotion frequencies between our datasets. so we look if there is difference in the sentiments association between the datasets.
+
+```{r}
+unique_words_1<- class1 %>%
+    select(id, text, label) %>%
+    unnest_tokens("word", text)
+
+unique_words_2<- class2 %>%
+    select(id, text, label) %>%
+    unnest_tokens("word", text)
+
+
+words_cummon1 <- unique_words_1 %>% table() %>% as.data.frame() %>% filter(Freq >10)
+words_cummon2 <- unique_words_2 %>% table() %>% as.data.frame() %>% filter(Freq >10)
+```
+
+Word-clouds of common words in texts from each label
+
+```{r}
+wordcloud(words_cummon1$word,words_cummon1$Freq)
+wordcloud(words_cummon2$word,words_cummon2$Freq)
+```
+
+Number of positive and negative tokens in each class
+
+```{r}
+combined1 <- as.data.frame(unique_words_1) %>%
+  inner_join(get_sentiments('bing')) %>%
+  count(., sentiment)
+
+combined2 <- as.data.frame(unique_words_2) %>%
+  inner_join(get_sentiments('bing')) %>%
+  count(., sentiment)
+
+combined <- rbind(transform(combined1, dataset = "class1"),
+                  transform(combined2, dataset = "class2"))
+
+ggplot(combined, aes(x = sentiment, y = n, fill = sentiment)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sentiment", y = "Count") +
+  ggtitle("Sentiment Counts by Dataset") +
+  facet_wrap(~ dataset, ncol = 1) +
+  scale_fill_manual(values = c("positive" = "pink", "negative" = "black"))
+```
+
+## t-testing
+
+Are texts from class 0 have different number of positive/negative words then texts from class 1?
+
+```{r}
+unique_words <- rbind(unique_words_1, unique_words_2)
+
+unique_words_sentiments <- unique_words |>
+  inner_join(get_sentiments("bing"), by = join_by("word" == "word")) |>
+  group_by(id) |>
+  mutate(n_positive = sum(sentiment == "positive"),
+         n_negative = sum(sentiment == "negative")) |>
+  ungroup() |>
+  select(id, label, n_positive, n_negative) |>
+  distinct()
+```
+
+## T-test
+
+### Number of positive tokens
+
+```{r}
+t.test(n_positive ~ label, data = unique_words_sentiments)
+```
+
+Texts from class 1 have significantly more positive tokens on average. As seen in the wordclouds.
+
+```{r}
+t.test(n_negative ~ label, data = unique_words_sentiments)
+```
+
+Texts from class 1 have significantly more negative tokens on average.
+
+## TF-IDF
+
+Another way to compare between sentiments of texts from different classes, is comparing vector embeddings. In this way vector embeddings for texts from each label can be calculated and compared.
+
+Vector embedding can be calculated in different ways, this document starts with the TF-IDF DFM (Data Feature Matrix) method.
+
+Creating a DFM (Data Feature Matrix) for texts.
+
+```{r}
+txt <- tibble(data_sampled)
+
+txt_dfm <- txt |>
+  corpus(text_field = "text") |>
+  tokens(remove_punct = T, remove_symbols = T, remove_numbers = T, remove_url = T, remove_separators = T) |>
+  dfm() |>
+  dfm_tfidf()
+
+txt_dfm
+```
+
+Creating long data frame containing tokens and their tf-idf values for each text.
+
+```{r}
+dict <- get_sentiments("bing")
+
+txt_dfm_df <- convert(txt_dfm, to = "data.frame") |>
+  mutate(label = factor(rep(c(0,1), each = 500))) |>
+  group_by(label) |>
+  summarise(across(where(is.numeric), mean, na.rm = T)) |>
+  pivot_longer(cols = where(is.numeric),
+               names_to = "word",
+               values_to = "value") |>
+  left_join(dict) |>
+  drop_na(sentiment)
+
+
+txt_dfm_df_positive <- txt_dfm_df |>
+  filter(sentiment == "positive")
+
+txt_dfm_df_negative <- txt_dfm_df |>
+  filter(sentiment == "negative")
+```
+
+## t-Testing
+
+Testing whether texts from different classes differ in their tf-idf values for tokens from positive/negative sentiments.
+
+```{r}
+t.test(txt_dfm_df_positive$value[txt_dfm_df_positive$label == "0"],
+       txt_dfm_df_positive$value[txt_dfm_df_positive$label == "1"])
+```
+
+tf-idf values of positive tokens are higher on average in texts from class 1.
+
+```{r}
+t.test(txt_dfm_df_negative$value[txt_dfm_df_negative$label == "0"],
+       txt_dfm_df_negative$value[txt_dfm_df_negative$label == "1"])
+```
+
+tf-idf values of negative tokens are higher on average in texts from class 1.
+
+## GLOVE embeddings - DDR
+
+Importing GLOVE model in order to create the embbedings.
+```{r}
+glove <- data.table::fread('glove.840B.300d.txt') %>%
+  as_tibble()
+```
+
+
+Embedding the dictionary in order to compare it later to texts
+```{r}
+dict <- get_sentiments("bing")
+
+dict_vec <- dict |>
+  inner_join(glove, by = join_by("word" == "V1")) |>
+  group_by(sentiment) |>
+  summarise(across(V2:V301, mean))
+```
+
+Tokenizing texts
+```{r}
+#| eval: false
+input_text_tok <- txt |>
+  tibble(data_sampled) |>
+  group_by(id) |> 
+  tidytext::unnest_ngrams(word, txt, n = 1)
+```
+
+```{r}
+#| echo: false
+input_text_tok <- read_rds("input_text_tok.rds")
+```
+
+
+Creating word embeddings for texts 
+```{r}
+set.seed(14)
+
+input_text_vec <- input_text_tok %>%
+  filter(id %in% as.character(sample(c(1:500), 10)) | id %in% as.character(sample(c(501:1000), 10))) |>
+  left_join(glove, by = join_by("word" == "V1")) |> 
+  select(-word)
+
+input_text_vec2 <- input_text_vec |>
+  group_by(id) |>
+  summarise(across(2:ncol(input_text_vec)-1, mean, na.rm = T))
+
+
+#calculate cosine similarity with dict
+similarity_matrix <- word2vec::word2vec_similarity(as.matrix(select(input_text_vec2, -id)), 
+                              as.matrix(select(dict_vec, -sentiment)), 
+                              type = "cosine")
+```
+
+
+## T-testing
+```{r}
+#| eval: false
+t.test(similarity_matrix[1:10,1], similarity_matrix[11:20,1])
+t.test(similarity_matrix[1:10,2], similarity_matrix[11:20,2])
+```
+
+### Data are essentially constant
+
+## CCR
+
+### Embedding the texts
+
+```{r}
+#| eval: false
+text_emb <- textEmbed(data_sampled, model = "sentence-transformers/all-MiniLM-L6-v2", layers = 6)
+```
+
+```{r}
+#| echo: false
+text_emb <- readRDS("text_embedded.rds")
+```
+
+### Embedding the Just-world questionnaire
+```{r}
+questionnaire_JW <- c("I feel that people get what they are entitled to have",
+                   "I feel that a person’s efforts are noticed and rewarded",
+                   "I feel that people earn the rewards and punishments they get",
+                   "I feel that people who meet with misfortune have brought it on themselves",
+                   "I basically feel that the world is a fair place")
+
+questionnaire_vec <- text::textEmbed(questionnaire_JW, 
+                                     model = 'sentence-transformers/all-MiniLM-L6-v2', 
+                                     layers = 6)
+```
+
+Creating a mean vector of the JW questionnaire
+```{r}
+questionnaire_vec_avg <- questionnaire_vec$texts$texts %>% 
+  summarise(across(everything(), mean))
+```
+
+
+Calculating cosine similarity between embedded texts and embedded questionnaire
+```{r}
+similarity_matrix2 <- word2vec::word2vec_similarity(as.matrix(text_emb$texts$text),
+                              as.matrix(questionnaire_vec_avg),
+                              type = "cosine")
+
+
+t.test(similarity_matrix2[1:500,], similarity_matrix2[501:1000,])
+```
+
+Texts from class 1 are more similar to the mean JW embedding, than texts from class 0.
+
+
+

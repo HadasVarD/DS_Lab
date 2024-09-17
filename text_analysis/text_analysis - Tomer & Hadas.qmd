@@ -1,0 +1,299 @@
+---
+title: "Excersice 4 - Twitter data"
+author: "Tomer Zipori & Hadas Wardi"
+date: 05-11-2023
+title-block-banner: "#7952B3"
+execute: 
+  warning: false
+  message: false
+  cache: true
+format:
+  html:
+    theme: cosmo
+    backgroundcolor: "#F5F5F5"
+    fontcolor: "#7952B3"
+    toc: true
+    toc-depth: 2
+    toc-location: right
+    embed-resources: true
+editor: visual
+---
+
+# Setup
+
+```{r}
+#| output: false
+library(tidyverse)
+library(quanteda)
+library(topicmodels)
+library(quanteda.textmodels)
+library(spacyr)
+library(corpustools)
+library(glue)
+```
+
+# Loading data
+
+```{r}
+#| output: false
+twitts <- read_csv("2016-10-16 02-AM.NY.mid.csv", show_col_types = F) |>
+  rename(doc_id = '...1') # renaming ID column
+
+```
+
+# Pre-processing
+
+## Function
+
+```{r}
+pre_process_text <- function(txt) {
+  out <- txt
+  
+  out <- out |>
+  str_remove_all(pattern = "RT") |> # remove 'RT' prefixes specifying that this is a retweet
+  str_remove_all(pattern = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+") |> # regex supposed to capture all urls
+  str_remove_all(pattern = "@\\w+ *") |> # removing @ tags
+  str_remove_all(pattern = "[[:punct:]]") |> # removing punctuation
+  str_replace_all(pattern = "<.*>", replacement = " ") |> # replace unicoded emojis with spaces
+  str_remove_all(pattern = "[^[:alnum:] ]") |> # now it is possible to remove everything that is not a letter or digit
+  str_trim() |>
+  str_squish() |>
+  str_to_lower()
+  
+  return(out)
+}
+```
+
+## preprocessing twitts column
+
+```{r}
+corp <- twitts |>
+  mutate(text = pre_process_text(text))
+```
+
+## Creating corpus object
+
+```{r}
+corp <- corpus(corp, text_field = "text")
+```
+
+# Tokenizing & DTM
+
+```{r}
+dtm <- corp |>
+  tokens() |>
+  dfm()
+```
+
+## DTM Weighting
+
+### Binary (Boolean) weighting
+
+```{r}
+dtm |> dfm_weight(scheme = "boolean")
+```
+
+### Proportional weighting
+
+```{r}
+dtm |> dfm_weight(scheme = "prop")
+```
+
+### tf-idf weighting
+
+```{r}
+dtm |> dfm_tfidf()
+```
+
+Note the difference between $tf-idf$ and proportional weighting...
+
+# Topic modeling
+
+First, converting to `topicmodels` object.
+
+```{r}
+dtm_partial <- dtm |>
+  dfm_trim() |>
+  convert(to = "topicmodels")
+```
+
+Now, topic modeling.
+
+```{r}
+lda_model <- topicmodels::LDA(dtm_partial, method = "Gibbs", k = 10) 
+```
+
+Inspecting some terms and their categorization.
+
+```{r}
+topicmodels::terms(lda_model, 10)
+```
+
+Too many stop words (and numbers). Filtering them out and fitting the LDA model again. We also filtered out rare tokens (less then 10 occurrences).
+
+```{r}
+dtm_partial_no_stopwords <- corp |>
+          tokens(remove_numbers = T) |>
+          dfm() |>
+          dfm_remove(stopwords("en")) |>
+          dfm_trim(min_termfreq = 10, termfreq_type = "count")
+
+dtm_no_stopwords_lda <- dtm_partial_no_stopwords |>
+  convert(to = "topicmodels")
+```
+
+Again, topic modeling.
+
+```{r}
+topic_model_trimed <- topicmodels::LDA(dtm_no_stopwords_lda, method = "Gibbs", k = 5)
+```
+
+Inspecting some terms and their categorization.
+
+```{r}
+topicmodels::terms(topic_model_trimed, 10)
+```
+
+Results are probably affected by the large number of 'non-real' words like: misspelled words, slang etc...
+
+# Differential Language Analysis
+
+## Which tweets get larger exposure?
+
+Creating variable that indicates if a tweet has been retweeted or not
+
+```{r}
+docvars(dtm_partial_no_stopwords, "retweeted") <- docvars(dtm_partial_no_stopwords, "retweetCount") > 0
+
+table(docvars(dtm_partial_no_stopwords, "retweeted"))
+```
+
+```{r}
+#| echo: false
+base_rate <- glue("${table(docvars(dtm_partial_no_stopwords, 'retweeted'))['TRUE']/(table(docvars(dtm_partial_no_stopwords, 'retweeted'))['FALSE']+table(docvars(dtm_partial_no_stopwords, 'retweeted'))['TRUE'])}$")
+```
+
+Base rate of `r base_rate`.
+
+Train-test splitting.
+
+```{r}
+set.seed(14)
+
+train_dtm <- dfm_sample(dtm_partial_no_stopwords, size = 800) # 80% of data
+test_dtm <- dtm_partial_no_stopwords[setdiff(docnames(dtm_partial_no_stopwords), docnames(train_dtm)),]
+```
+
+## Naive-Bayes classifier
+
+A Naive-Bayes classifier predicts the class (in this case of a document) in the following way:\
+1. From the training data, the likelihood of each token to appear in documents of each class is calculated. For example, if the word *giveaway* appeared in $11$% of the documents in the first class, and in $2$% of the documents in the second class, the likelihood of it in each class is:\
+$$
+\displaylines{p(giveaway\ |\ class\ 1)=0.11\\p(giveaway\ |\ class\ 2)=0.02}
+$$
+
+2.  The prior probability of each document to be classified to each class is also learned from the training data, and it is the base-rate frequencies of the two classes.\
+
+3.  For each document in the test set, the likelihood of it belonging to each class is calculated by multiplying the likelihoods of the tokens appearing in it. So if a document is for example, the sentence *I like turtles*, then the likelihood of it to belong class 1 is:\
+    $$
+    \displaylines{p(I\ |\ class\ 1)\cdotp(like\ |\ class\ 1)\cdotp(turtles\ |\ class\ 1)}
+    $$ More formally, if a document belong to a certain class $k$, then it's likelihood of being comprised of a set of tokens $t$ is:\
+    $$
+    \prod_{i=1}^{n}p(t_i\ |\ class\ k)
+    $$
+
+4.  According to Bayes theorem, the probability of the document to belong to class $k$ - the posterior probability - is proportional to the product of the likelihood of it's tokens given this class and the prior probability of any document to belong to this class:\
+    $$
+    p(class\ k\ |\ t) \propto p(t\ |\ class\ k)\cdotp(class\ k)
+    $$
+
+5.  Because the Naive-Bayes classifier is comparing between classes, the standardizing term is not needed. The class that has the largest product of prior and likelihood is the class the document will be classified to.
+
+## Fitting the model
+
+```{r}
+nb_model <- textmodel_nb(train_dtm, y = docvars(train_dtm, "retweeted"))
+```
+
+### Test performance
+
+```{r}
+pred_nb <- predict(nb_model, newdata = test_dtm)
+
+(conmat_nb <- table(pred_nb, docvars(test_dtm, "retweeted")))
+```
+
+Confusion matrix.
+
+```{r}
+caret::confusionMatrix(conmat_nb, mode = "everything", positive = "TRUE")
+```
+
+## Logistic regression
+
+```{r}
+lr_model <- textmodel_lr(x = train_dtm, y = docvars(train_dtm, "retweeted"))
+```
+
+### Test performance
+
+```{r}
+pred_lr <- predict(lr_model, newdata = test_dtm)
+
+(conmat_lt <- table(pred_lr, docvars(test_dtm, "retweeted")))
+```
+
+Confusion matrix.
+
+```{r}
+caret::confusionMatrix(conmat_lt, mode = "everything", positive = "TRUE")
+```
+
+Plot important words for classification.
+
+```{r}
+#| out-width: 200%
+lr_summary <- summary(lr_model) # summarizing the model
+
+coefs <- data.frame(lr_summary$estimated.feature.scores) # extracting coefficients
+
+
+col_vec <- c("#7952B3", "#F5F5F5")
+
+coefs |>
+  
+  # preparing df for plot
+  rownames_to_column(var = "Token") |>
+  rename(Coefficient = TRUE.) |>
+  filter(Coefficient != 0 & Token != "(Intercept)") |>
+  
+  # ggplotting
+  ggplot(aes(x = Token, y = Coefficient)) +
+  geom_point(color = col_vec[1]) +
+  scale_y_continuous(n.breaks = 10) +
+  ggtitle("Most important words for classifying if a tweet has been retweeted") +
+  theme_classic() +
+  theme(plot.background = element_rect(color = col_vec[2], fill = col_vec[2]),
+        panel.background = element_rect(color = col_vec[2], fill = col_vec[2]),
+        axis.line = element_line(color = col_vec[1]),
+        axis.title = element_text(color = col_vec[1]),
+        axis.text = element_text(color = col_vec[1]),
+        plot.title = element_text(size = 16, color = col_vec[1], hjust = .5, family = "serif", face = "bold"))
+```
+
+# Keyness
+
+```{r}
+library(quanteda.textplots)
+library(quanteda.textstats)
+
+tstat_key <- textstat_keyness(dtm_partial_no_stopwords, target = docvars(dtm_partial_no_stopwords, "retweeted"))
+
+textplot_keyness(tstat_key)
+```
+
+```{r wordcloud}
+#| echo: false
+#| eval: false
+textplot_wordcloud(tstat_key, min_size = 1, max_size = 10, rotation = 0.35, comparison = T, color = c("#f7146f", "#ca2c88", "#ab3e8f", "#874996", "#1399e0"))
+```

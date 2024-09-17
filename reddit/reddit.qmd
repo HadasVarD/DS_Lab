@@ -1,0 +1,233 @@
+---
+title: "NLP on scraped Reddit posts"
+author: "Tomer & Hadas"
+date: 07-15-2023
+title-block-banner: "#7952B3"
+execute: 
+  warning: false
+  message: false
+  cache: true
+format:
+  html:
+    theme: cosmo
+    backgroundcolor: "#F5F5F5"
+    fontcolor: "#7952B3"
+    toc: true
+    toc-depth: 2
+    toc-location: right
+    embed-resources: true
+editor: visual
+---
+
+# Setup
+
+```{r}
+#| output: false
+library(tidyverse)
+library(quanteda)
+library(quanteda.textplots)
+library(text)
+library(RedditExtractoR)
+```
+
+# Reddit scraping
+
+```{r}
+reddit_posts <- RedditExtractoR::find_thread_urls(subreddit = "irishpolitics", period = "month", sort_by = "hot")
+rownames(reddit_posts) <- NULL
+
+reddit_posts2 <- filter(reddit_posts, comments > 1 & comments < 7)
+
+reddit_comment <- RedditExtractoR::get_thread_content(reddit_posts2$url)
+View(reddit_comment$comments)
+```
+
+# Classifying title's sentiment
+
+```{r}
+#| eval: false
+reddit_posts2$id <- c(1:nrow(reddit_posts2))
+
+emotions <- data.frame("url" = reddit_posts2$url,
+                       "Negative" = rep(NA, nrow(reddit_posts2)),
+                       "Positive" = rep(NA, nrow(reddit_posts2)))
+
+for (i in 1:nrow(reddit_posts2)) {
+  tmp <- textClassify(reddit_posts2$title[i], return_all_scores = T) |>
+  pivot_wider(names_from = label_x, values_from = score_x)
+  
+  emotions$Negative[i] <- tmp$NEGATIVE
+  emotions$Positive[i] <- tmp$POSITIVE
+}
+```
+
+```{r}
+#| echo: false
+emotions <- read_rds("../emotions.rds")
+```
+
+# Classifying comment's sentiment
+## Classifying
+```{r}
+#| eval: false
+comments <- reddit_comment$comments |>
+  select(url, comment) |>
+  filter(str_length(comment) <= 512)
+
+emotions_comments <- data.frame("url" = unique(comments$url),
+                                "Negative" = rep(NA, length(unique(comments$url))),
+                                "Positive" = rep(NA, length(unique(comments$url))))
+
+for (u in unique(comments$url)) {
+  tmp <- textClassify(comments$comment[comments$url == u], return_all_scores = T) |>
+  pivot_wider(names_from = label_x, values_from = score_x)
+  
+  emotions_comments$Negative[emotions_comments$url == u] <- tmp$NEGATIVE
+  emotions_comments$Positive[emotions_comments$url == u] <- tmp$POSITIVE
+}
+```
+
+## Comparing to post sentiment
+### Renaming cols
+```{r}
+#| eval: false
+emotions_comments <- emotions_comments |>
+  rename(Negative_comment = Negative, Postive_comment = Positive)
+```
+
+```{r}
+#| echo: false
+emotions_comments <- read_rds("../emotions_comments.rds")
+```
+
+
+```{r}
+combined <- emotions_comments |>
+  left_join(emotions)
+
+cor.test(combined$Negative, combined$Negative_comment)
+
+cor.test(combined$Positive, combined$Postive_comment)
+```
+
+## Scatter plots
+### Positive
+
+```{r}
+ggplot(combined, aes(x = Positive, y = Postive_comment)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "royalblue") +
+  theme_classic()
+```
+
+
+
+```{r}
+ggplot(combined, aes(x = Negative, y = Negative_comment)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "red") +
+  theme_classic()
+```
+
+
+## Loading dictionary
+```{r}
+dict <- read.delim("shared.txt", header = F)
+
+dict_vec <- paste(dict$V1, collapse = "|")
+```
+
+## Counting moral words in each post title
+```{r}
+reddit_posts2 <- reddit_posts2 |>
+  mutate(n_moral = str_count(title, pattern = dict_vec))
+
+ggplot(reddit_posts2, aes(x = n_moral, y = comments)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+parameters::model_parameters(lm(comments ~ n_moral, data = reddit_posts2))
+```
+
+## CCR analysis vs. Belief in Just world
+
+Embedding the Just-World dictionary
+
+```{r}
+questionnaire_JW <- c("I feel that people get what they are entitled to have",
+                   "I feel that a person’s efforts are noticed and rewarded",
+                   "I feel that people earn the rewards and punishments they get",
+                   "I feel that people who meet with misfortune have brought it on themselves",
+                   "I basically feel that the world is a fair place")
+
+questionnaire_vec <- text::textEmbed(questionnaire_JW, 
+                                     model = 'sentence-transformers/all-MiniLM-L6-v2', 
+                                     layers = 6)
+
+questionnaire_vec_avg <- questionnaire_vec$texts$texts %>% 
+  summarise(across(everything(), mean))
+```
+
+Extracting posts from r/Politics. This subreddit can be seen as an experimental control for r/irishpolitics.
+```{r}
+#| eval: false
+reddit_posts_politics <- RedditExtractoR::find_thread_urls(subreddit = "Politics", period = "month", sort_by = "hot")
+
+reddit_posts_politics <- reddit_posts_politics[1:200,]
+
+rownames(reddit_posts_politics) <- NULL
+```
+
+```{r}
+#| echo: false
+reddit_posts_politics <- read_rds("../reddit_posts_politics.rds")
+```
+
+
+## Embedding!
+```{r}
+#| eval: false
+politics_embedded <- textEmbed(reddit_posts_politics$title, model = 'sentence-transformers/all-MiniLM-L6-v2', 
+                                     layers = 6)
+
+irishpolitics_embedded <- textEmbed(reddit_posts$title[1:200], model = 'sentence-transformers/all-MiniLM-L6-v2', 
+                                     layers = 6)
+```
+
+```{r}
+#| echo: false
+politics_embedded <- read_rds("../uspolitics_embedded.rds")
+irishpolitics_embedded <- read_rds("../irishpolitics_embedded.rds")
+```
+
+
+## Cosine similarity
+```{r}
+cos_simil_irishpolitics <- irishpolitics_embedded$texts$texts |>
+  rowwise() |>
+  mutate(JW_simil = textSimilarity(across(everything()), questionnaire_vec_avg))
+
+cos_simil_politics <- politics_embedded$texts$texts |>
+  rowwise() |>
+  mutate(JW_simil = textSimilarity(across(everything()), questionnaire_vec_avg))
+```
+
+```{r}
+data.frame("r/irishpolitics" = cos_simil_irishpolitics$JW_simil,
+           "r/politics" = cos_simil_politics$JW_simil) |>
+  pivot_longer(cols = everything() ,values_to = "Cosine", names_to = "Subreddit") |>
+  
+  ggplot(aes(x = Subreddit, y = Cosine, color = Subreddit)) +
+  geom_jitter(width = 0.05) +
+  geom_boxplot()
+```
+
+```{r}
+t.test(cos_simil_irishpolitics$JW_simil, cos_simil_politics$JW_simil)
+```
+
+No difference between the two subreddits. Meaning that posts are not different in their expressions of a Just-World beliefs. Also noticeable is the relative low mean cosine values. hinting that posts about general and Irish politics are not characterized by beliefs in a Just-World.
+
+
+
+

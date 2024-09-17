@@ -1,0 +1,262 @@
+---
+title: "Final Project "
+description: "Data analysis"
+author: "Hadas Wardi & Tomer tzipori"
+date: last-modified
+title-block-banner: "#D70E90"
+execute: 
+  warning: false
+  message: false
+  cache: true
+  code-fold: true
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+#bibliography: references.bib
+editor: visual
+---
+
+# Setup
+
+```{r}
+#| output: false
+library(factoextra)
+library(cluster)
+library(tidyverse)
+library(text)
+library(caret)
+library(class)
+library(quanteda)
+library(quanteda.textplots)
+library(pandoc)
+```
+
+## `text` initialization
+
+```{r}
+#| output: false
+#| eval: false
+textrpp_initialize()
+```
+
+# Data
+
+```{r}
+train <- read_csv("train.csv", show_col_types = F)
+test <- read_csv("test.csv", show_col_types = F)
+```
+
+## Text cleaning
+
+```{r}
+text_clean <- function(data) {
+  output <- data |>
+    str_remove_all(pattern = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+") |>
+    str_remove_all(pattern = "[[:punct:]]") |>
+    str_trim() |>
+    str_squish()
+  return(output)
+}
+
+train_clean <- train |>
+  mutate(content = text_clean(content))
+  
+test_clean <- test |>
+  mutate(content = text_clean(content))
+```
+
+## Embedding
+
+```{r}
+#| eval: false
+train_emb <- textEmbed(train_clean$content, model = "sentence-transformers/all-MiniLM-L6-v2", layers = 6)
+
+test_emb <- textEmbed(test_clean$content, model = "sentence-transformers/all-MiniLM-L6-v2", layers = 6)
+```
+
+```{r}
+#| echo: false
+train_emb <- read_rds("train_emb.rds")
+test_emb <- read_rds("test_emb.rds")
+```
+
+#### Extracting vector representations
+
+```{r}
+train_vec <- train_emb$texts$texts
+test_vec <- test_emb$texts$texts
+
+train_vec$id <- train_clean$rowid
+test_vec$id <- test_clean$rowid
+
+train_vec <- train_clean |>
+  select(rowid, label) |>
+  right_join(train_vec, by = join_by("rowid" == "id")) |>
+  select(-rowid) |>
+  mutate(label = factor(label))
+```
+
+## Clustering texts along two dimensions
+
+```{r}
+#| eval: false
+classified_texts <- data.frame("rowid" = train_clean$rowid,
+                                "Negative" = rep(NA, length(train_clean$rowid)),
+                                "Positive" = rep(NA, length(train_clean$rowid)))
+
+for (i in classified_texts$rowid) {
+  tmp <- textClassify(train_clean$content[train_clean$rowid == i], return_all_scores = T) |>
+  pivot_wider(names_from = label_x, values_from = score_x)
+  
+  classified_texts$Negative[classified_texts$rowid == i] <- tmp$NEGATIVE
+  classified_texts$Positive[classified_texts$rowid == i] <- tmp$POSITIVE
+}
+```
+
+```{r}
+#| echo: false
+classified_texts <- read_rds("classified_texts_train.rds")
+```
+
+Removing the negative column
+
+```{r}
+classified_texts_positive <- classified_texts |>
+  select(-Negative)
+```
+
+### Arousal dimension
+
+```{r}
+arousal_sentences <- c(
+  "The thrilling roller coaster ride sent my heart racing with excitement",
+  "Bursting with euphoria, I danced wildly at the music festival",
+  "The intense passion between them was electric and palpable",
+  "My adrenaline surged as I bungee jumped off the towering bridge",
+  "The heart-pounding suspense of the horror movie had me on the edge of my seat",
+  "I felt an overwhelming rush of exhilaration as I won the race",
+  "The electric atmosphere of the concert filled me with energy",
+  "The adrenaline-fueled chase left me breathless and on the run",
+  "My heart pounded with anticipation before the big game",
+  "The intense chemistry between us was undeniable and intoxicating",
+  "I felt an overwhelming surge of excitement as I boarded the plane to my dream destination",
+  "The high-speed thrill of the motorcycle ride left me exhilarated",
+  "I was on cloud nine, feeling invincible after acing the exam",
+  "The intense competitiveness of the competition fueled my drive to win",
+  "The passionate kiss left me feeling dizzy and on cloud nine",
+  "My heart raced with fear as I faced the haunted house alone",
+  "The electrifying moment on stage had me shaking with nerves and excitement",
+  "I felt an overwhelming surge of joy as I held my newborn baby",
+  "The heart-stopping moment during the near-miss accident shook me to my core",
+  "The intense attraction between us ignited a fiery desire",
+  "My excitement reached a fever pitch as the roller coaster climbed higher",
+  "The adrenaline rush of skydiving was unlike anything I had experienced",
+  "The intense emotion of the moment left me feeling alive and on fire",
+  "My heart pounded with nervousness before going on stage to perform",
+  "The passionate embrace and fiery kiss left me weak in the knees",
+  "I felt an overwhelming surge of love as I held my partner close",
+  "The high-stakes poker game had my heart pounding in my chest",
+  "The electrifying touch of their hand sent tingles through my body",
+  "I was on cloud nine after the exhilarating dance performance",
+  "The intense competition brought out the best in me, pushing me to new limits",
+  "My excitement soared as I saw my favorite band take the stage",
+  "The adrenaline-fueled adventure sport had me on an emotional high",
+  "The heart-pounding moment before the big announcement had me on edge",
+  "I was filled with euphoria as I accomplished my long-standing goal",
+  "The intense chemistry between us made every moment feel electric",
+  "My heart raced with exhilaration as I raced down the ski slope",
+  "The thrilling plot twist in the movie had me gasping in surprise",
+  "I felt an overwhelming surge of joy as I reunited with an old friend",
+  "The heart-stopping moment on the roller coaster made me scream with excitement",
+  "The passionate argument left me feeling heated and on edge",
+  "My adrenaline surged as I leaped from the high diving board into the pool",
+  "The electrifying energy of the live concert had me dancing all night",
+  "I was filled with euphoria after the adrenaline-fueled adventure",
+  "The intense emotion of the moment left me feeling alive and invigorated",
+  "My heart pounded with excitement as I approached the finish line",
+  "The electrifying atmosphere of the stadium had me cheering at the top of my lungs",
+  "I felt an overwhelming surge of happiness as I reunited with my family",
+  "The heart-pounding fear of the haunted house had me clinging to my friend",
+  "The intense chemistry between us made every touch feel electric"
+)
+
+arousal_emb <- textEmbed(arousal_sentences, model = "sentence-transformers/all-MiniLM-L6-v2", layers = 6)
+
+arousal_vec <- arousal_emb$texts$texts |>
+  summarise_all(mean)
+```
+
+**INSERT KNN HERE**
+
+## Logistic regression
+
+```{r}
+train_vec <- train_vec |>
+  mutate(label = factor(case_when(label == "0" ~ "no",
+                           label == "1" ~ "yes")))
+```
+
+```{r}
+glm_model <- glm(label ~ ., data = train_vec, family = binomial())
+
+performance::model_performance(glm_model)
+```
+
+### With 10-fold CV
+
+```{r}
+tc <- trainControl(method = "cv", number = 10)
+```
+
+```{r}
+glmcv_model <- train(label ~ .,
+                     data = train_vec,
+                     method = "glm",
+                     family = "binomial",
+                     trControl = tc)
+```
+
+```{r}
+glmcv_model
+```
+
+## Boosted Random Forest
+
+```{r}
+library(gbm)
+```
+
+### Train control
+
+Choosing adaptive cross validation due to the large number of hyper-parameters
+
+```{r}
+tc <- trainControl(method = "adaptive_cv",
+                   number = 10, repeats = 10,
+                   adaptive = list(min = 5, alpha = 0.05, 
+                                   method = "BT", complete = F),
+                   search = "random",
+                   classProbs = T)
+```
+
+```{r}
+#| eval: false
+set.seed(14)
+boost_model <- train(label ~ ., 
+                   data = train_vec,
+                   method = "gbm",
+                   metric = "Kappa",
+                   trControl = tc,
+                   verbose = T)
+```
+
+```{r}
+#| echo: false
+boost_model <- read_rds("boost_model.rds")
+```
+
+```{r}
+boost_model
+```
